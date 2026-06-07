@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Dispatch — Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #07090d; --bg-raise: #0c1018; --bg-card: #101520;
+    --border: #1e2a38; --border-hi: #2a3d52;
+    --green: #39ff9a; --green-dim: #1a7a4a;
+    --red: #ff4444; --amber: #ffaa00; --cyan: #00d4ff;
+    --text: #b0c8b8; --text-dim: #5a7a65; --text-hi: #ddeedd;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(57,255,154,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,154,0.028) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px; line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,9,13,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem; display: flex; align-items: center;
+    justify-content: space-between; height: 48px;
+  }
+  .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); text-shadow: 0 0 12px rgba(57,255,154,0.4); text-decoration: none; }
+  .nav-logo span { color: var(--text-dim); }
+  .nav-links { display: flex; align-items: center; gap: 1.6rem; list-style: none; }
+  .nav-links a { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--green); }
+  .nav-yt { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim) !important; border: 1px solid var(--border-hi); padding: 0.22rem 0.7rem; opacity: 0.5; cursor: default !important; pointer-events: none; }
+  .nav-yt::before { content: '▶ '; font-size: 0.55rem; }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .page-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), var(--cyan), var(--green), transparent); }
+  .page-kicker { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-bottom: 0.8rem; display: block; }
+  .page-kicker::before { content: '// '; opacity: 0.45; }
+  .page-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(1.8rem, 5vw, 3rem); color: var(--text-hi); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+  .page-title em { font-style: italic; color: var(--green); text-shadow: 0 0 16px rgba(57,255,154,0.3); }
+  .page-sub { font-size: 1rem; color: var(--text-dim); }
+
+  /* STATS ROW */
+  .stats-row { display: flex; gap: 2rem; padding: 1.4rem 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .stat { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+  .stat strong { display: block; font-size: 1.4rem; color: var(--green); letter-spacing: 0; text-shadow: 0 0 12px rgba(57,255,154,0.3); margin-bottom: 0.2rem; font-family: 'DM Mono', monospace; }
+
+  /* ARCHIVE LIST */
+  .archive-section { padding: 2rem 0; }
+  .archive-month { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green-dim); padding: 0.6rem 0; border-bottom: 1px solid var(--border); margin-bottom: 0.4rem; }
+  .archive-month::before { content: '> '; color: var(--green); }
+
+  .archive-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: start;
+    gap: 1.2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .archive-item:hover { background: var(--bg-card); margin: 0 -1rem; padding: 1rem; }
+  .archive-item:last-child { border-bottom: none; }
+
+  .archive-date { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text-dim); padding-top: 0.2rem; white-space: nowrap; }
+  .archive-date .day-num { display: block; font-size: 0.95rem; color: var(--text); margin-bottom: 0.15rem; }
+
+  .archive-headline { color: var(--text-hi); font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.05rem; line-height: 1.25; margin-bottom: 0.35rem; }
+  .archive-summary { font-size: 0.9rem; color: var(--text-dim); line-height: 1.5; }
+
+  .archive-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; padding-top: 0.2rem; }
+  .tag { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.18rem 0.5rem; white-space: nowrap; }
+  .tag-green { color: var(--green); border: 1px solid var(--green-dim); background: rgba(57,255,154,0.06); }
+  .tag-red   { color: var(--red);   border: 1px solid var(--red);       background: rgba(255,68,68,0.06); }
+  .tag-amber { color: var(--amber); border: 1px solid var(--amber);     background: rgba(255,170,0,0.06); }
+  .tag-dim   { color: var(--text-dim); border: 1px solid var(--border-hi); }
+
+  /* EMPTY STATE (future days placeholder) */
+  .empty-slot {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1.2rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px dashed var(--border);
+    opacity: 0.3;
+  }
+  .empty-date { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-dim); }
+  .empty-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; }
+
+  @media (max-width: 580px) {
+    .archive-item { grid-template-columns: 80px 1fr; }
+    .archive-tags { display: none; }
+    .stats-row { gap: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">THE <span>DISPATCH</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="archive.html" class="active">Archive</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><span class="nav-yt">YouTube</span></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="page-kicker">Full Archive</span>
+    <h1 class="page-title">Every day, <em>on record.</em></h1>
+    <p class="page-sub">All editions of The Dispatch — daily cybersecurity &amp; technology briefings.</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><strong id="total-days">1</strong>Days published</div>
+    <div class="stat"><strong id="total-stories">5</strong>Stories covered</div>
+    <div class="stat"><strong>0</strong>YouTube episodes</div>
+    <div class="stat"><strong>June 2026</strong>First edition</div>
+  </div>
+
+  <div class="archive-section">
+
+    <div class="archive-month">June 2026</div>
+
+    <!-- DAY 001 -->
+    <a class="archive-item" href="daily/2026-06-07.html">
+      <div class="archive-date">
+        <span class="day-num">Day 001</span>
+        Sun, 7 Jun 2026
+      </div>
+      <div>
+        <div class="archive-headline">The week your infrastructure got smarter enemies</div>
+        <div class="archive-summary">Project Glasswing expands to 150 orgs · GHOST STADIUM FIFA fraud · CISA CVE-2022-0492 &amp; CVE-2025-48595 · Instagram password reset leak · AI as both threat and defence</div>
+      </div>
+      <div class="archive-tags">
+        <span class="tag tag-red">Critical CVEs</span>
+        <span class="tag tag-amber">Phishing</span>
+        <span class="tag tag-green">AI Sec</span>
+      </div>
+    </a>
+
+    <!-- UPCOMING PLACEHOLDERS -->
+    <div class="empty-slot">
+      <span class="empty-date">Mon, 8 Jun — Day 002</span>
+      <span class="empty-label">// Publishing tomorrow</span>
+    </div>
+    <div class="empty-slot">
+      <span class="empty-date">Tue, 9 Jun — Day 003</span>
+      <span class="empty-label">// Coming soon</span>
+    </div>
+    <div class="empty-slot">
+      <span class="empty-date">Wed, 10 Jun — Day 004</span>
+      <span class="empty-label">// Coming soon</span>
+    </div>
+    <div class="empty-slot">
+      <span class="empty-date">Thu, 11 Jun — Day 005</span>
+      <span class="empty-label">// World Cup kickoff day</span>
+    </div>
+
+  </div>
+</div>
+
+<div style="background:var(--bg-raise);border-top:1px solid var(--border);padding:2rem 1.5rem;text-align:center;margin-top:2rem;">
+  <div class="container" style="display:flex;flex-direction:column;align-items:center;gap:0.8rem;">
+    <a href="index.html" style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);text-shadow:0 0 10px rgba(57,255,154,0.3);text-decoration:none;">THE DISPATCH</a>
+    <span style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);opacity:0.5;">© 2026 The Dispatch &nbsp;·&nbsp; thedispatch.io</span>
+  </div>
+</div>
+
+</body>
+</html>

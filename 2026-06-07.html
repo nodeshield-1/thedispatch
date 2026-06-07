@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Dispatch — Day 001 · 7 June 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:         #07090d;
+    --bg-raise:   #0c1018;
+    --bg-card:    #101520;
+    --border:     #1e2a38;
+    --border-hi:  #2a3d52;
+    --green:      #39ff9a;
+    --green-dim:  #1a7a4a;
+    --green-glow: rgba(57,255,154,0.15);
+    --red:        #ff4444;
+    --amber:      #ffaa00;
+    --cyan:       #00d4ff;
+    --text:       #b0c8b8;
+    --text-dim:   #5a7a65;
+    --text-hi:    #ddeedd;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(57,255,154,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,154,0.028) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ══════════════════════════════════════
+     NAV BAR
+  ══════════════════════════════════════ */
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,9,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    height: 48px;
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--green);
+    text-shadow: 0 0 12px rgba(57,255,154,0.4);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--text-dim); }
+  .nav-links {
+    display: flex; align-items: center; gap: 1.6rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-dim); text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-yt {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-dim) !important;
+    border: 1px solid var(--border-hi);
+    padding: 0.22rem 0.7rem;
+    opacity: 0.5;
+    cursor: default !important;
+    pointer-events: none;
+  }
+  .nav-yt::before { content: '▶ '; font-size: 0.55rem; }
+
+  /* ══════════════════════════════════════
+     MASTHEAD
+  ══════════════════════════════════════ */
+  .masthead {
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 0 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::after {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(57,255,154,0.05), transparent);
+    animation: scan 5s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes scan { to { left: 150%; } }
+  .masthead::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), var(--cyan), var(--green), transparent);
+  }
+
+  /* Day counter pill */
+  .day-counter {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border-hi);
+    padding: 0.28rem 0.9rem;
+    margin-bottom: 1.4rem;
+  }
+  .day-counter .day-dot {
+    width: 5px; height: 5px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .title-main {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: clamp(2.4rem, 8vw, 5.8rem);
+    line-height: 1; letter-spacing: 0.05em;
+    color: var(--green);
+    text-shadow: 0 0 20px rgba(57,255,154,0.55), 0 0 60px rgba(57,255,154,0.18);
+    text-transform: uppercase;
+  }
+  .title-em {
+    color: var(--cyan);
+    text-shadow: 0 0 20px rgba(0,212,255,0.55), 0 0 60px rgba(0,212,255,0.18);
+  }
+  .title-cursor {
+    display: inline-block;
+    width: 0.55em; height: 0.82em;
+    background: var(--green); vertical-align: middle;
+    margin-left: 0.08em;
+    box-shadow: 0 0 12px var(--green);
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 50%{ opacity: 0; } }
+
+  .masthead-rule { margin: 1.4rem auto 1rem; border: none; border-top: 1px solid var(--border-hi); width: 80%; }
+
+  /* Date + metadata row */
+  .masthead-meta {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; flex-wrap: wrap;
+  }
+  .meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 1.4rem;
+    border-right: 1px solid var(--border-hi);
+  }
+  .meta-item:last-child { border-right: none; }
+  .meta-item.date { color: var(--text); }
+
+  /* ══════════════════════════════════════
+     DAY NAV (prev / next)
+  ══════════════════════════════════════ */
+  .day-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim); text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: color 0.15s;
+    opacity: 0.4; cursor: default; pointer-events: none; /* no previous on day 1 */
+  }
+  .day-nav-btn.next { opacity: 0.4; } /* not live yet */
+  .day-nav-btn:hover { color: var(--green); }
+  .day-nav-center {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ══════════════════════════════════════
+     YOUTUBE CTA BANNER
+  ══════════════════════════════════════ */
+  .yt-banner {
+    margin: 1.8rem 0 0;
+    border: 1px dashed var(--border-hi);
+    background: var(--bg-card);
+    padding: 1rem 1.4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+    opacity: 0.55;
+  }
+  .yt-banner-left {
+    display: flex; align-items: center; gap: 0.9rem;
+  }
+  .yt-icon {
+    width: 32px; height: 32px;
+    background: var(--border-hi);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .yt-icon svg { width: 14px; height: 14px; fill: var(--text-dim); }
+  .yt-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim); line-height: 1.6;
+  }
+  .yt-label strong { color: var(--text); display: block; }
+  .yt-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-dim); border: 1px solid var(--border-hi);
+    padding: 0.22rem 0.6rem; flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════
+     LAYOUT
+  ══════════════════════════════════════ */
+  .container { max-width: 780px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ══════════════════════════════════════
+     LEDE
+  ══════════════════════════════════════ */
+  .lede { padding: 2.4rem 0 1.8rem; border-bottom: 1px solid var(--border); }
+  .lede-kicker {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--green);
+    margin-bottom: 0.7rem; display: block;
+  }
+  .lede-kicker::before { content: '// '; opacity: 0.45; }
+  .lede h1 {
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.5rem); line-height: 1.15;
+    letter-spacing: -0.01em; margin-bottom: 1rem; color: var(--text-hi);
+  }
+  .lede h1 em { font-style: italic; color: var(--red); }
+  .lede-body { font-size: 1.05rem; color: var(--text); max-width: 640px; }
+  .reading-time {
+    display: inline-block; margin-top: 1.2rem;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim);
+    border: 1px solid var(--border-hi); padding: 0.25rem 0.75rem;
+  }
+
+  /* ══════════════════════════════════════
+     SEGMENT HEADER (section label + number)
+  ══════════════════════════════════════ */
+  .section { padding: 2.4rem 0; border-bottom: 1px solid var(--border); }
+  .section:last-of-type { border-bottom: none; }
+
+  .segment-header {
+    display: flex; align-items: center; gap: 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+  .segment-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem; color: var(--text-dim); letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    background: var(--bg-card);
+    color: var(--green);
+    border: 1px solid var(--green-dim);
+    padding: 0.26rem 0.8rem;
+  }
+  .section-tag .emoji { font-size: 0.88rem; }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 1.85rem); line-height: 1.2;
+    letter-spacing: -0.01em; margin-bottom: 1rem; color: var(--text-hi);
+  }
+  .section h2 em { font-style: italic; color: var(--red); }
+
+  .section p { margin-bottom: 1rem; font-size: 1.02rem; color: var(--text); }
+  .section p:last-child { margin-bottom: 0; }
+
+  strong { font-weight: 600; color: var(--text-hi); }
+
+  /* ══════════════════════════════════════
+     CALLOUTS
+  ══════════════════════════════════════ */
+  .aside-note {
+    background: rgba(255,170,0,0.06);
+    border-left: 2px solid var(--amber);
+    padding: 0.9rem 1.2rem; margin: 1.4rem 0;
+    font-style: italic; font-size: 0.95rem; color: #c8a06a;
+  }
+  .teal-note {
+    background: rgba(57,255,154,0.05);
+    border-left: 2px solid var(--green);
+    padding: 0.9rem 1.2rem; margin: 1.4rem 0;
+    font-size: 0.97rem; color: var(--text);
+  }
+  .teal-note strong { color: var(--green); }
+
+  /* ══════════════════════════════════════
+     BADGES
+  ══════════════════════════════════════ */
+  .threat-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace; font-size: 0.56rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 0.18rem 0.6rem; margin-left: 0.5rem; vertical-align: middle;
+  }
+  .badge-critical { background: rgba(255,68,68,0.12); color: var(--red); border: 1px solid var(--red); box-shadow: 0 0 8px rgba(255,68,68,0.2); }
+  .badge-high     { background: rgba(255,170,0,0.1); color: var(--amber); border: 1px solid var(--amber); }
+  .badge-watch    { background: rgba(57,255,154,0.08); color: var(--green); border: 1px solid var(--green-dim); }
+
+  /* ══════════════════════════════════════
+     CVE CARDS
+  ══════════════════════════════════════ */
+  .cve-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.4rem 0; }
+  @media (max-width: 520px) { .cve-grid { grid-template-columns: 1fr; } }
+  .cve-card {
+    border: 1px solid var(--border-hi); padding: 1rem 1.1rem;
+    background: var(--bg-card); position: relative;
+  }
+  .cve-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, var(--red), transparent);
+  }
+  .cve-id { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--red); letter-spacing: 0.05em; display: block; margin-bottom: 0.3rem; }
+  .cve-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-hi); }
+  .cve-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.55; }
+
+  /* ══════════════════════════════════════
+     PULL QUOTE
+  ══════════════════════════════════════ */
+  .pull-quote {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.1rem, 2.8vw, 1.45rem); line-height: 1.45;
+    color: var(--cyan);
+    border-top: 1px solid var(--cyan); border-bottom: 1px solid var(--cyan);
+    padding: 1.2rem 0; margin: 2rem 0; text-align: center;
+    text-shadow: 0 0 20px rgba(0,212,255,0.22);
+  }
+
+  /* ══════════════════════════════════════
+     STAT PILLS
+  ══════════════════════════════════════ */
+  .scam-stat { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.4rem 0; }
+  .stat-pill {
+    flex: 1; min-width: 140px;
+    border: 1px solid var(--border-hi); padding: 1rem 1rem 0.8rem;
+    background: var(--bg-card); text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .stat-pill::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+  .stat-number { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 2.1rem; color: var(--red); line-height: 1; display: block; text-shadow: 0 0 16px rgba(255,68,68,0.35); }
+  .stat-label  { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.4rem; display: block; }
+
+  /* ══════════════════════════════════════
+     SOURCES
+  ══════════════════════════════════════ */
+  .sources {
+    margin-top: 1.8rem; padding-top: 1rem;
+    border-top: 1px dashed var(--border-hi);
+  }
+  .sources-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 0.55rem; display: block;
+  }
+  .sources-label::before { content: '// '; opacity: 0.45; }
+  .source-link {
+    display: flex; align-items: baseline; gap: 0.5rem;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    line-height: 1.65; color: var(--green-dim);
+    text-decoration: none; transition: color 0.15s, text-shadow 0.15s;
+  }
+  .source-link:hover { color: var(--green); text-shadow: 0 0 10px rgba(57,255,154,0.35); }
+  .source-link::before { content: '↗'; font-size: 0.6rem; flex-shrink: 0; color: var(--text-dim); transition: color 0.15s; }
+  .source-link:hover::before { color: var(--green); }
+
+  /* ══════════════════════════════════════
+     FURTHER READING
+  ══════════════════════════════════════ */
+  .reading-section {
+    background: var(--bg-raise);
+    border-top: 1px solid var(--border-hi);
+    padding: 2.5rem 0;
+  }
+  .reading-section h3 {
+    font-family: 'DM Mono', monospace; font-weight: 500;
+    font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+    margin-bottom: 1.5rem; color: var(--green);
+  }
+  .reading-section h3::before { content: '> '; }
+  .reading-item { padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+  .reading-item:last-child { border-bottom: none; }
+  .reading-item-title { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1rem; color: var(--text-hi); margin-bottom: 0.3rem; }
+  .reading-item-title a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .reading-item-title a:hover { color: var(--green); }
+  .reading-item-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.5; }
+  .reading-dot { display: inline-block; width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-right: 0.5rem; vertical-align: middle; box-shadow: 0 0 6px var(--green); }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  .footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  }
+  .footer-brand {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--green);
+    text-shadow: 0 0 10px rgba(57,255,154,0.3);
+  }
+  .footer-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  .footer-links a {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim); text-decoration: none; transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--green); }
+  .footer-copy {
+    font-family: 'DM Mono', monospace; font-size: 0.55rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+    opacity: 0.5;
+  }
+  .footer-sign {
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    color: var(--text-dim); letter-spacing: 0.1em;
+    text-align: center; max-width: 480px;
+  }
+
+  /* ══════════════════════════════════════
+     ANIMATIONS
+  ══════════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lede    { animation: fadeUp 0.45s ease both; }
+  .section { animation: fadeUp 0.45s ease both; }
+  .section:nth-child(2) { animation-delay: 0.05s; }
+  .section:nth-child(3) { animation-delay: 0.10s; }
+  .section:nth-child(4) { animation-delay: 0.15s; }
+  .section:nth-child(5) { animation-delay: 0.20s; }
+
+  @media (max-width: 580px) {
+    .navbar { padding: 0 1rem; }
+    .nav-links { gap: 1rem; }
+    .meta-item { padding: 0 0.8rem; font-size: 0.55rem; }
+    body { font-size: 16px; }
+    .scam-stat { gap: 0.8rem; }
+    .footer-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV BAR ══ -->
+<nav class="navbar">
+  <a class="nav-logo" href="#">THE <span>DISPATCH</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Archive</a></li>
+    <li><a href="#">About</a></li>
+    <li><span class="nav-yt">YouTube</span></li>
+  </ul>
+</nav>
+
+<!-- ══ MASTHEAD ══ -->
+<div class="masthead">
+  <div class="container">
+    <div class="day-counter">
+      <span class="day-dot"></span>
+      Day 001 &nbsp;·&nbsp; Daily Cybersecurity &amp; Technology Brief
+    </div>
+    <div class="title-main">THE <span class="title-em">DISPATCH</span><span class="title-cursor"></span></div>
+    <hr class="masthead-rule" />
+    <div class="masthead-meta">
+      <span class="meta-item date">Sunday, 7 June 2026</span>
+      <span class="meta-item">Cybersecurity &amp; Tech</span>
+      <span class="meta-item">~5 min read</span>
+      <span class="meta-item">5 stories</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DAY NAV ══ -->
+<div class="container">
+  <div class="day-nav">
+    <a class="day-nav-btn prev">← Day 000</a>
+    <span class="day-nav-center">[ Day 001 of 001 ]</span>
+    <a class="day-nav-btn next">Day 002 →</a>
+  </div>
+
+  <!-- ══ YOUTUBE CTA ══ -->
+  <div class="yt-banner">
+    <div class="yt-banner-left">
+      <div class="yt-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 6.2s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.6 2 12 2 12 2s-4.6 0-7.3.1c-.6.1-1.9.1-3 1.3C.8 4.2.5 6.2.5 6.2S.2 8.5.2 10.8v2.1c0 2.3.3 4.6.3 4.6s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7 21.7 12 21.8 12 21.8s4.6 0 7.3-.2c.6-.1 1.9-.1 3-1.2.9-.8 1.2-2.8 1.2-2.8s.3-2.3.3-4.6v-2.1c0-2.3-.3-4.6-.3-4.7zm-13.9 9.4V8.4l8.1 3.6-8.1 3.6z"/></svg>
+      </div>
+      <div class="yt-label">
+        <strong>Watch today's brief on YouTube</strong>
+        AI-narrated daily video summary — launching soon
+      </div>
+    </div>
+    <span class="yt-badge">Coming Soon</span>
+  </div>
+</div>
+
+<!-- ══ ARTICLE BODY ══ -->
+<div class="container">
+
+  <!-- LEDE -->
+  <div class="lede">
+    <span class="lede-kicker">Daily Threat Brief</span>
+    <h1>The week your infrastructure got <em>smarter enemies</em></h1>
+    <p class="lede-body">
+      An AI found 10,000 critical vulnerabilities in the world's most important software — and told nobody but 50 organisations.
+      Scammers built an entire fraud empire around a football tournament starting Thursday.
+      CISA quietly confirmed two exploited-in-the-wild flaws in Linux and Android.
+      And Instagram exposed user data through a password reset bug that a junior developer should have caught in 2011.
+      A perfectly normal Sunday in security, then.
+    </p>
+    <span class="reading-time">☕ ~5 minute read &nbsp;·&nbsp; 5 stories today</span>
+  </div>
+
+  <!-- ══ SEGMENT 01 ══ -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">01 /</span>
+      <span class="section-tag"><span class="emoji">🔬</span> Lead Story — Anthropic / Project Glasswing</span>
+    </div>
+    <h2>An AI found 10,000 critical bugs in the world's most important software. <em>Then they gave it to 150 more people.</em></h2>
+
+    <p>
+      The biggest cybersecurity story of 2026 so far quietly expanded this week.
+      Anthropic announced it is scaling Project Glasswing — its vulnerability-hunting programme using
+      Claude Mythos Preview, an unreleased frontier model — to approximately <strong>150 new organisations
+      across more than 15 countries</strong>, including operators in power, water, healthcare, and telecommunications.
+    </p>
+    <p>
+      The backstory: in April, Anthropic gave around 50 partners exclusive access to Mythos, a model
+      it describes as surpassing all but the most skilled humans at finding and exploiting software vulnerabilities.
+      In one month, those partners collectively uncovered <strong>more than 10,000 high- or critical-severity
+      vulnerabilities</strong> across the most systemically important codebases in the world.
+      One example: Mythos discovered a flaw in wolfSSL — an open-source cryptography library used by
+      billions of devices — that would have let an attacker forge certificates for bank and email provider websites.
+      Fully convincing. Totally undetectable to the end user. Now patched as CVE-2026-5194.
+    </p>
+
+    <div class="pull-quote">
+      "Progress on software security used to be limited by how quickly we could find new vulnerabilities. Now it's limited by how quickly we can verify, disclose, and patch them."
+    </div>
+
+    <p>
+      That shift — from discovery bottleneck to remediation bottleneck — is the structural change nobody
+      prepared for. Open-source maintainers are being flooded with vulnerability reports faster than
+      they can process them. On average, patching a Mythos-identified critical bug takes two weeks.
+      A security team that can't ship fixes faster than the AI finds bugs isn't more secure —
+      it's just more aware of how exposed it already was.
+    </p>
+
+    <div class="teal-note">
+      <strong>What this means for you:</strong> Mythos isn't public. But the capabilities it
+      demonstrates — autonomous, high-speed vulnerability discovery — will proliferate.
+      Anthropic's own warning is that adversarial actors will eventually have access to equivalent tools.
+      The question is whether defenders will have patched enough before that happens.
+    </div>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.anthropic.com/news/expanding-project-glasswing" target="_blank" rel="noopener">Anthropic — Expanding Project Glasswing (official)</a>
+      <a class="source-link" href="https://www.anthropic.com/research/glasswing-initial-update" target="_blank" rel="noopener">Anthropic — Project Glasswing: An Initial Update (official)</a>
+      <a class="source-link" href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank" rel="noopener">TechCrunch — Anthropic scales Claude Mythos to critical infrastructure in 15+ countries</a>
+      <a class="source-link" href="https://thehackernews.com/2026/05/claude-mythos-ai-finds-10000-high.html" target="_blank" rel="noopener">The Hacker News — Claude Mythos AI Finds 10,000 High-Severity Flaws</a>
+      <a class="source-link" href="https://www.cnbc.com/2026/06/02/anthropic-mythos-ai-project-glasswing.html" target="_blank" rel="noopener">CNBC — Anthropic shares Mythos with 150 more organisations</a>
+    </div>
+  </div>
+
+  <!-- ══ SEGMENT 02 ══ -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">02 /</span>
+      <span class="section-tag"><span class="emoji">⚽</span> Field Report — FIFA World Cup 2026</span>
+    </div>
+    <h2>The tournament starts Thursday. The <em>fraud infrastructure</em> has been live since August.</h2>
+
+    <p>
+      The FIFA World Cup kicks off in North America on 11 June — and if you've clicked on anything
+      football-related in the past ten months, there is a non-trivial chance you've already been targeted.
+      The FBI, Group-IB, Fortinet, Kaspersky, Proofpoint, and Check Point have all published warnings
+      this week about a fraud operation that is not improvised. It is industrial.
+    </p>
+
+    <div class="scam-stat">
+      <div class="stat-pill">
+        <span class="stat-number">4,300+</span>
+        <span class="stat-label">Fraudulent FIFA domains registered</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number">3,800</span>
+        <span class="stat-label">Domains parked &amp; ready to activate</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number">1,700+</span>
+        <span class="stat-label">Spoofed FIFA accounts on social media</span>
+      </div>
+    </div>
+
+    <p>
+      Group-IB identified the primary operation as <strong>GHOST STADIUM</strong>,
+      a Chinese-speaking, financially motivated group running a single phishing kit
+      across more than 300 of those domains. The kit clones FIFA's login page convincingly
+      enough to harvest real account credentials. The broader scheme includes banking trojans
+      embedded in pirate streaming apps, fake job ads, spoofed calendar invites, and fraudulent ticket marketplaces.
+    </p>
+
+    <div class="aside-note">
+      Proofpoint found that more than one-third of official World Cup 2026 partner domains
+      lack sufficient DMARC enforcement to block domain spoofing of their brand.
+      The criminals are more operationally disciplined than the sponsors.
+    </div>
+
+    <p>
+      The FBI warning specifically flags lookalike domains using minor spelling variations
+      and alternate TLDs: .org, .xyz, .live, .sale.
+      <strong>If you're attending matches, buying tickets, or streaming:</strong>
+      verify URLs manually. Do not click links from social media.
+      Do not install anything to watch a game for free. The malware is absolutely real.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://thehackernews.com/2026/06/fifa-world-cup-2026-scams-are-already.html" target="_blank" rel="noopener">The Hacker News — FIFA World Cup 2026 Scams Are Already Live (GHOST STADIUM deep-dive)</a>
+      <a class="source-link" href="https://thenextweb.com/news/fifa-world-cup-2026-scams-phishing-malware" target="_blank" rel="noopener">The Next Web — Over 4,300 fake FIFA domains, banking malware in pirate streaming apps</a>
+      <a class="source-link" href="https://www.bleepingcomputer.com/news/security/fbi-warns-of-fake-fifa-websites-running-world-cup-fraud-schemes/" target="_blank" rel="noopener">Bleeping Computer — FBI warns of fake FIFA websites running World Cup fraud schemes</a>
+      <a class="source-link" href="https://securitymea.com/2026/06/03/proofpoint-warns-fifa-world-cup-2026-fans-about-impersonation-scams/" target="_blank" rel="noopener">Security MEA — Proofpoint warns FIFA World Cup 2026 fans about impersonation scams</a>
+      <a class="source-link" href="https://blog.checkpoint.com/exposure-management/fraud-ransomware-and-fake-apps-are-already-targeting-fifa-2026" target="_blank" rel="noopener">Check Point Blog — Fraud, Ransomware, and Fake Apps targeting FIFA 2026</a>
+    </div>
+  </div>
+
+  <!-- ══ SEGMENT 03 ══ -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">03 /</span>
+      <span class="section-tag"><span class="emoji">🔴</span> Patch Desk — CISA / Linux / Android</span>
+    </div>
+    <h2>CISA confirmed two actively exploited flaws. <em>Your Linux servers and Android fleet are on notice.</em>
+      <span class="threat-badge badge-high">Patch Now</span>
+    </h2>
+
+    <p>
+      On 2 June, CISA added two vulnerabilities to its Known Exploited Vulnerabilities catalogue —
+      confirming in-the-wild exploitation of both. Federal agencies had until 5 June to patch.
+      Private organisations should treat the same deadline as their own.
+    </p>
+
+    <div class="cve-grid">
+      <div class="cve-card">
+        <span class="cve-id">CVE-2022-0492 &nbsp;<span class="threat-badge badge-high">CVSS 7.8</span></span>
+        <div class="cve-title">Linux Kernel — cgroups v1 Privilege Escalation</div>
+        <div class="cve-desc">
+          A missing capability check allows local attackers to escape containers and execute
+          arbitrary commands as root on the host. Particularly dangerous in cloud and CI/CD environments.
+        </div>
+      </div>
+      <div class="cve-card">
+        <span class="cve-id">CVE-2025-48595 &nbsp;<span class="threat-badge badge-critical">CVSS 8.4</span></span>
+        <div class="cve-title">Android Framework — Integer Overflow</div>
+        <div class="cve-desc">
+          Affects Android 14–16. No user interaction required.
+          Google confirmed "limited, targeted exploitation" — nation-state actor language.
+          June 2026 patch level resolves it.
+        </div>
+      </div>
+    </div>
+
+    <p>
+      A separate, unpatched critical vulnerability — <strong>CVE-2026-20245</strong> —
+      was flagged this week allowing arbitrary command execution as root on affected systems.
+      No vendor patch is yet available. Monitor exposure actively until a fix ships.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA — Known Exploited Vulnerabilities Catalog (primary source)</a>
+      <a class="source-link" href="https://www.bleepingcomputer.com/news/security/cisa-warns-of-active-attacks-exploiting-android-linux-bugs/" target="_blank" rel="noopener">Bleeping Computer — CISA warns of active attacks exploiting Android, Linux bugs</a>
+      <a class="source-link" href="https://gbhackers.com/cisa-issues-alert-on-linux-kernel-security-flaw/" target="_blank" rel="noopener">GBHackers — CISA Issues Alert on Actively Exploited Linux Kernel Security Flaw</a>
+      <a class="source-link" href="https://www.scworld.com/brief/cisa-adds-android-and-linux-kernel-flaws-to-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">SC World — CISA adds Android and Linux Kernel flaws to exploited vulnerabilities catalog</a>
+      <a class="source-link" href="https://www.securityweek.com/" target="_blank" rel="noopener">SecurityWeek — CVE-2026-20245: unpatched critical RCE (June 5, 2026)</a>
+    </div>
+  </div>
+
+  <!-- ══ SEGMENT 04 ══ -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">04 /</span>
+      <span class="section-tag"><span class="emoji">📱</span> Incident — Meta / Instagram</span>
+    </div>
+    <h2>Instagram's password reset flow exposed users' contact details. <em>Unredacted.</em>
+      <span class="threat-badge badge-watch">Patched</span>
+    </h2>
+
+    <p>
+      On 6 June, researchers disclosed a critical logic bug in Instagram's web-based
+      password reset flow. The flaw exposed <strong>unredacted email addresses and phone numbers</strong>
+      associated with user accounts — the kind of data that enables targeted phishing,
+      SIM-swap attacks, and account takeover at scale.
+    </p>
+    <p>
+      The bug has since been patched. But the timing is, let's say,
+      <em>interesting</em> — arriving one week before a global sporting event that will drive
+      millions of casual users to check their social accounts, many of them using
+      recycled passwords across platforms.
+    </p>
+
+    <div class="aside-note">
+      A logic flaw in password reset infrastructure — one of the most security-sensitive
+      flows in any application — is not an exotic exploit. It is the kind of error
+      that code review and security testing are specifically designed to catch.
+      That it reached production says something about process, not just code.
+    </div>
+
+    <p>
+      <strong>For users:</strong> rotate Instagram credentials. Enable two-factor authentication.
+      Use a password manager. Not exciting recommendations — they just happen to work.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://cybersecuritynews.com/" target="_blank" rel="noopener">Cyber Security News — Instagram password reset flow exposed unredacted user contact data (June 6, 2026)</a>
+      <a class="source-link" href="https://www.esecurityplanet.com/weekly-roundup/ai-threats-zero-days-and-data-breaches-define-this-week-of-june-2026-in-cybersecurity/" target="_blank" rel="noopener">eSecurity Planet — AI Threats, Zero-Days, and Data Breaches: Week of June 2026</a>
+    </div>
+  </div>
+
+  <!-- ══ SEGMENT 05 ══ -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">05 /</span>
+      <span class="section-tag"><span class="emoji">🌐</span> Signal — The Bigger Picture</span>
+    </div>
+    <h2>AI is both the problem and the solution. <em>The industry hasn't decided which one it prefers.</em></h2>
+
+    <p>
+      A Cloud Security Alliance report published 2 June surveyed more than 900 cybersecurity leaders
+      and found that <strong>82% of organisations lack effective runtime visibility</strong>
+      into their production environments — meaning most companies can't see the vulnerabilities
+      that Mythos-class AI would find in minutes. Meanwhile, attackers are already using AI
+      to generate malware, bypass basic security checks, and convert vague malicious intent
+      into functional code.
+    </p>
+    <p>
+      The asymmetry is the problem. Defenders need to secure everything;
+      attackers only need to find one gap. AI makes that gap-finding faster, cheaper, and
+      more scalable than at any previous point in the history of the internet.
+    </p>
+    <p>
+      One more thing to keep in mind as WWDC opens Monday with Apple unveiling
+      a Gemini-powered Siri and a multi-model AI Extensions system:
+      every new AI surface integrated into your operating system is also a new attack surface.
+      The security implications of AI-native OS design have barely been discussed.
+      Expect that to change.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.securityweek.com/two-new-reports-offer-competing-explanations-for-cybersecuritys-growing-crisis/" target="_blank" rel="noopener">SecurityWeek — Two New Reports Offer Competing Explanations for Cybersecurity's Growing Crisis</a>
+      <a class="source-link" href="https://bostoninstituteofanalytics.org/blog/weekly-cybersecurity-update-latest-cybersecurity-news-30-may-6-june-2026/" target="_blank" rel="noopener">Boston Institute of Analytics — Weekly Cybersecurity Update: 30 May – 6 June 2026</a>
+      <a class="source-link" href="https://www.techtimes.com/articles/317902/20260606/wwdc-2026-opens-monday-gemini-powers-rebuilt-siri-iphone-11-faces-ios-27-cut.htm" target="_blank" rel="noopener">TechTimes — WWDC 2026 Opens Monday: Gemini Powers Rebuilt Siri</a>
+      <a class="source-link" href="https://www.buildfastwithai.com/blogs/ai-news-today-june-7-2026" target="_blank" rel="noopener">Build Fast with AI — AI News Today June 7, 2026: 16 Biggest Stories</a>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══ FURTHER READING ══ -->
+<div class="reading-section">
+  <div class="container">
+    <h3>Worth reading today</h3>
+
+    <div class="reading-item">
+      <div class="reading-item-title">
+        <span class="reading-dot"></span>
+        <a href="https://www.anthropic.com/research/glasswing-initial-update" target="_blank" rel="noopener">Anthropic — Project Glasswing: An Initial Update</a>
+      </div>
+      <div class="reading-item-desc">
+        The primary source on Mythos's vulnerability findings, including the wolfSSL certificate-forging exploit.
+        Unusually candid about the patching bottleneck problem.
+      </div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title">
+        <span class="reading-dot"></span>
+        <a href="https://thehackernews.com/2026/06/fifa-world-cup-2026-scams-are-already.html" target="_blank" rel="noopener">The Hacker News — FIFA World Cup 2026 Scams Are Already Live</a>
+      </div>
+      <div class="reading-item-desc">
+        The best consolidated writeup on GHOST STADIUM and the broader fraud infrastructure.
+        Share this with anyone attending the tournament or buying streaming access.
+      </div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title">
+        <span class="reading-dot"></span>
+        <a href="https://www.securityweek.com/two-new-reports-offer-competing-explanations-for-cybersecuritys-growing-crisis/" target="_blank" rel="noopener">SecurityWeek — Two New Reports Offer Competing Explanations for Cybersecurity's Crisis</a>
+      </div>
+      <div class="reading-item-desc">
+        CSA and FireMon published simultaneous reports on the same problem from different angles.
+        One argues inadequate tools; the other says inadequate human oversight. Both are probably right.
+      </div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title">
+        <span class="reading-dot"></span>
+        <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA — Known Exploited Vulnerabilities Catalogue</a>
+      </div>
+      <div class="reading-item-desc">
+        Bookmark this. Review it every day. It is the closest thing to a consensus
+        "patch this now" signal that exists across the industry, and it is free.
+      </div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title">
+        <span class="reading-dot"></span>
+        <a href="https://developer.apple.com/wwdc26/" target="_blank" rel="noopener">WWDC 2026 — Tomorrow, 8 June, 10am PT</a>
+      </div>
+      <div class="reading-item-desc">
+        Tim Cook's final keynote. A Gemini-powered Siri rebuild. The security questions
+        raised by AI-native OS design are unlikely to be the headline — watch for them anyway.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <div class="container" style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
+    <span class="footer-brand">THE DISPATCH</span>
+    <ul class="footer-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Archive</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">YouTube — Coming Soon</a></li>
+    </ul>
+    <p class="footer-sign">
+      Patch your Linux hosts. Verify your FIFA URLs.<br />
+      And if Siri suddenly knows things you never told Apple — that's probably fine. Probably.
+    </p>
+    <span class="footer-copy">© 2026 The Dispatch &nbsp;·&nbsp; Day 001 &nbsp;·&nbsp; thedispatch.io</span>
+  </div>
+</div>
+
+</body>
+</html>

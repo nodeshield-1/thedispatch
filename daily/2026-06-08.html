@@ -1,1 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NodeShield Brief — Day 002 · 8 June 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#07090d;--bg-raise:#0c1018;--bg-card:#101520;
+    --border:#1e2a38;--border-hi:#2a3d52;
+    --green:#39ff9a;--green-dim:#1a7a4a;
+    --red:#ff4444;--amber:#ffaa00;--cyan:#00d4ff;
+    --text:#b0c8b8;--text-dim:#5a7a65;--text-hi:#ddeedd;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background-color:var(--bg);background-image:linear-gradient(rgba(57,255,154,0.028) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,0.028) 1px,transparent 1px);background-size:40px 40px;color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-weight:300;font-size:18px;line-height:1.78;-webkit-font-smoothing:antialiased;}
+
+  /* NAV */
+  .navbar{position:sticky;top:0;z-index:100;background:rgba(7,9,13,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:48px;}
+  .nav-logo{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);text-shadow:0 0 12px rgba(57,255,154,0.4);text-decoration:none;}
+  .nav-logo span{color:var(--text-dim);}
+  .nav-links{display:flex;align-items:center;gap:1.6rem;list-style:none;}
+  .nav-links a{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.15s;}
+  .nav-links a:hover{color:var(--green);}
+  .nav-yt{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim)!important;border:1px solid var(--border-hi);padding:0.22rem 0.7rem;opacity:0.5;cursor:default!important;pointer-events:none;}
+  .nav-yt::before{content:'▶ ';font-size:0.55rem;}
+
+  /* MASTHEAD */
+  .masthead{border-bottom:1px solid var(--border);padding:3rem 0 2rem;text-align:center;position:relative;overflow:hidden;}
+  .masthead::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(57,255,154,0.05),transparent);animation:scan 5s linear infinite;pointer-events:none;}
+  @keyframes scan{to{left:150%;}}
+  .masthead::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),var(--cyan),var(--green),transparent);}
+  .day-counter{display:inline-flex;align-items:center;gap:0.6rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border-hi);padding:0.28rem 0.9rem;margin-bottom:1.4rem;}
+  .day-dot{width:5px;height:5px;background:var(--green);border-radius:50%;box-shadow:0 0 6px var(--green);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .title-main{font-family:'DM Mono',monospace;font-weight:500;font-size:clamp(1.6rem,5.5vw,4rem);line-height:1;letter-spacing:0.05em;color:var(--green);text-shadow:0 0 20px rgba(57,255,154,0.55),0 0 60px rgba(57,255,154,0.18);text-transform:uppercase;}
+  .title-em{color:var(--cyan);text-shadow:0 0 20px rgba(0,212,255,0.55),0 0 60px rgba(0,212,255,0.18);}
+  .title-cursor{display:inline-block;width:0.55em;height:0.82em;background:var(--green);vertical-align:middle;margin-left:0.08em;box-shadow:0 0 12px var(--green);animation:blink 1.1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .masthead-rule{margin:1.4rem auto 1rem;border:none;border-top:1px solid var(--border-hi);width:80%;}
+  .masthead-meta{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;}
+  .meta-item{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);padding:0 1.4rem;border-right:1px solid var(--border-hi);}
+  .meta-item:last-child{border-right:none;}
+  .meta-item.date{color:var(--text);}
+
+  /* DAY NAV */
+  .day-nav{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--border);}
+  .day-nav-btn{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;display:flex;align-items:center;gap:0.5rem;transition:color 0.15s;}
+  .day-nav-btn:hover{color:var(--green);}
+  .day-nav-btn.disabled{opacity:0.35;cursor:default;pointer-events:none;}
+  .day-nav-center{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);}
+
+  /* YT BANNER */
+  .yt-banner{margin:1.8rem 0 0;border:1px dashed var(--border-hi);background:var(--bg-card);padding:1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;opacity:0.55;}
+  .yt-banner-left{display:flex;align-items:center;gap:0.9rem;}
+  .yt-icon{width:32px;height:32px;background:var(--border-hi);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .yt-icon svg{width:14px;height:14px;fill:var(--text-dim);}
+  .yt-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);line-height:1.6;}
+  .yt-label strong{color:var(--text);display:block;}
+  .yt-badge{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border-hi);padding:0.22rem 0.6rem;flex-shrink:0;}
+
+  /* LAYOUT */
+  .container{max-width:780px;margin:0 auto;padding:0 1.5rem;}
+
+  /* LEDE */
+  .lede{padding:2.4rem 0 1.8rem;border-bottom:1px solid var(--border);}
+  .lede-kicker{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--green);margin-bottom:0.7rem;display:block;}
+  .lede-kicker::before{content:'// ';opacity:0.45;}
+  .lede h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.6rem,4vw,2.5rem);line-height:1.15;letter-spacing:-0.01em;margin-bottom:1rem;color:var(--text-hi);}
+  .lede h1 em{font-style:italic;color:var(--red);}
+  .lede-body{font-size:1.05rem;color:var(--text);max-width:640px;}
+  .reading-time{display:inline-block;margin-top:1.2rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border-hi);padding:0.25rem 0.75rem;}
+
+  /* SECTIONS */
+  .section{padding:2.4rem 0;border-bottom:1px solid var(--border);}
+  .section:last-of-type{border-bottom:none;}
+  .segment-header{display:flex;align-items:center;gap:0.9rem;margin-bottom:1.1rem;}
+  .segment-num{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-dim);letter-spacing:0.1em;flex-shrink:0;}
+  .section-tag{display:inline-flex;align-items:center;gap:0.5rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;background:var(--bg-card);color:var(--green);border:1px solid var(--green-dim);padding:0.26rem 0.8rem;}
+  .section h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.3rem,3vw,1.85rem);line-height:1.2;letter-spacing:-0.01em;margin-bottom:1rem;color:var(--text-hi);}
+  .section h2 em{font-style:italic;color:var(--red);}
+  .section p{margin-bottom:1rem;font-size:1.02rem;color:var(--text);}
+  .section p:last-child{margin-bottom:0;}
+  strong{font-weight:600;color:var(--text-hi);}
+
+  /* CALLOUTS */
+  .aside-note{background:rgba(255,170,0,0.06);border-left:2px solid var(--amber);padding:0.9rem 1.2rem;margin:1.4rem 0;font-style:italic;font-size:0.95rem;color:#c8a06a;}
+  .teal-note{background:rgba(57,255,154,0.05);border-left:2px solid var(--green);padding:0.9rem 1.2rem;margin:1.4rem 0;font-size:0.97rem;color:var(--text);}
+  .teal-note strong{color:var(--green);}
+
+  /* BADGES */
+  .threat-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.18rem 0.6rem;margin-left:0.5rem;vertical-align:middle;}
+  .badge-critical{background:rgba(255,68,68,0.12);color:var(--red);border:1px solid var(--red);box-shadow:0 0 8px rgba(255,68,68,0.2);}
+  .badge-high{background:rgba(255,170,0,0.1);color:var(--amber);border:1px solid var(--amber);}
+  .badge-watch{background:rgba(57,255,154,0.08);color:var(--green);border:1px solid var(--green-dim);}
+
+  /* CVE CARDS */
+  .cve-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0;}
+  @media(max-width:520px){.cve-grid{grid-template-columns:1fr;}}
+  .cve-card{border:1px solid var(--border-hi);padding:1rem 1.1rem;background:var(--bg-card);position:relative;}
+  .cve-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--red),transparent);}
+  .cve-id{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--red);letter-spacing:0.05em;display:block;margin-bottom:0.3rem;}
+  .cve-title{font-weight:600;font-size:0.95rem;margin-bottom:0.4rem;color:var(--text-hi);}
+  .cve-desc{font-size:0.88rem;color:var(--text-dim);line-height:1.55;}
+
+  /* PULL QUOTE */
+  .pull-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.1rem,2.8vw,1.45rem);line-height:1.45;color:var(--cyan);border-top:1px solid var(--cyan);border-bottom:1px solid var(--cyan);padding:1.2rem 0;margin:2rem 0;text-align:center;text-shadow:0 0 20px rgba(0,212,255,0.22);}
+
+  /* SOURCES */
+  .sources{margin-top:1.8rem;padding-top:1rem;border-top:1px dashed var(--border-hi);}
+  .sources-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.55rem;display:block;}
+  .sources-label::before{content:'// ';opacity:0.45;}
+  .source-link{display:flex;align-items:baseline;gap:0.5rem;font-family:'DM Mono',monospace;font-size:0.68rem;line-height:1.65;color:var(--green-dim);text-decoration:none;transition:color 0.15s,text-shadow 0.15s;}
+  .source-link:hover{color:var(--green);text-shadow:0 0 10px rgba(57,255,154,0.35);}
+  .source-link::before{content:'↗';font-size:0.6rem;flex-shrink:0;color:var(--text-dim);transition:color 0.15s;}
+  .source-link:hover::before{color:var(--green);}
+
+  /* FURTHER READING */
+  .reading-section{background:var(--bg-raise);border-top:1px solid var(--border-hi);padding:2.5rem 0;}
+  .reading-section h3{font-family:'DM Mono',monospace;font-weight:500;font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1.5rem;color:var(--green);}
+  .reading-section h3::before{content:'> ';}
+  .reading-item{padding:0.9rem 0;border-bottom:1px solid var(--border);}
+  .reading-item:last-child{border-bottom:none;}
+  .reading-item-title{font-family:'Playfair Display',serif;font-weight:600;font-size:1rem;color:var(--text-hi);margin-bottom:0.3rem;}
+  .reading-item-title a{color:inherit;text-decoration:none;transition:color 0.15s;}
+  .reading-item-title a:hover{color:var(--green);}
+  .reading-item-desc{font-size:0.9rem;color:var(--text-dim);line-height:1.5;}
+  .reading-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:0.5rem;vertical-align:middle;box-shadow:0 0 6px var(--green);}
+
+  /* FOOTER */
+  .footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;}
+  .footer-brand{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);text-shadow:0 0 10px rgba(57,255,154,0.3);}
+  .footer-links{display:flex;gap:2rem;list-style:none;}
+  .footer-links a{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.15s;}
+  .footer-links a:hover{color:var(--green);}
+  .footer-sign{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-dim);letter-spacing:0.1em;text-align:center;max-width:480px;}
+  .footer-copy{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);opacity:0.5;}
+
+  /* ANIMS */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .lede{animation:fadeUp 0.45s ease both;}
+  .section{animation:fadeUp 0.45s ease both;}
+  .section:nth-child(2){animation-delay:0.05s;}
+  .section:nth-child(3){animation-delay:0.10s;}
+  .section:nth-child(4){animation-delay:0.15s;}
+  .section:nth-child(5){animation-delay:0.20s;}
+
+  @media(max-width:580px){
+    .navbar{padding:0 1rem;}
+    .nav-links{gap:1rem;}
+    body{font-size:16px;}
+    .footer-links{gap:1.2rem;flex-wrap:wrap;justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html">NODESHIELD <span>BRIEF</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../archive.html">Archive</a></li>
+    <li><a href="#">About</a></li>
+    <li><span class="nav-yt">YouTube</span></li>
+  </ul>
+</nav>
+
+<div class="masthead">
+  <div class="container">
+    <div class="day-counter"><span class="day-dot"></span>Day 002 &nbsp;·&nbsp; Daily Cybersecurity &amp; Technology Brief</div>
+    <div class="title-main">NODESHIELD <span class="title-em">BRIEF</span><span class="title-cursor"></span></div>
+    <hr class="masthead-rule" />
+    <div class="masthead-meta">
+      <span class="meta-item date">Monday, 8 June 2026</span>
+      <span class="meta-item">Cybersecurity &amp; Tech</span>
+      <span class="meta-item">~5 min read</span>
+      <span class="meta-item">5 stories</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="day-nav">
+    <a class="day-nav-btn" href="2026-06-07.html">← Day 001</a>
+    <span class="day-nav-center">[ Day 002 of 002 ]</span>
+    <a class="day-nav-btn disabled">Day 003 →</a>
+  </div>
+
+  <div class="yt-banner">
+    <div class="yt-banner-left">
+      <div class="yt-icon">
+        <svg viewBox="0 0 24 24"><path d="M23.5 6.2s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.6 2 12 2 12 2s-4.6 0-7.3.1c-.6.1-1.9.1-3 1.3C.8 4.2.5 6.2.5 6.2S.2 8.5.2 10.8v2.1c0 2.3.3 4.6.3 4.6s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7 21.7 12 21.8 12 21.8s4.6 0 7.3-.2c.6-.1 1.9-.1 3-1.2.9-.8 1.2-2.8 1.2-2.8s.3-2.3.3-4.6v-2.1c0-2.3-.3-4.6-.3-4.7zm-13.9 9.4V8.4l8.1 3.6-8.1 3.6z"/></svg>
+      </div>
+      <div class="yt-label">
+        <strong>Watch today's brief on YouTube</strong>
+        AI-narrated daily video summary — launching soon
+      </div>
+    </div>
+    <span class="yt-badge">Coming Soon</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="lede">
+    <span class="lede-kicker">Daily Threat Brief</span>
+    <h1>Cisco's SD-WAN has a zero-day. <em>There is no patch.</em></h1>
+    <p class="lede-body">
+      Cisco confirmed a zero-day in Catalyst SD-WAN Manager being actively exploited right now — with no fix available and no workaround. Apple unveiled a Gemini-powered Siri at WWDC and nobody asked about the attack surface. A hacker sold 340 million "stolen" OnlyFans records — and admitted he never actually hacked OnlyFans. WordPress site owners are one unpatched plugin away from losing everything. And your smart TV may already be someone else's scraping infrastructure.
+    </p>
+    <span class="reading-time">☕ ~5 minute read &nbsp;·&nbsp; 5 stories today</span>
+  </div>
+
+  <!-- SEGMENT 01 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">01 /</span>
+      <span class="section-tag">🔴 Lead Story — Cisco / Zero-Day</span>
+    </div>
+    <h2>Cisco's SD-WAN zero-day is being exploited right now. <em>No patch exists.</em>
+      <span class="threat-badge badge-critical">Zero-Day</span>
+    </h2>
+
+    <p>
+      On Thursday, Cisco confirmed that <strong>CVE-2026-20245</strong>, a high-severity vulnerability in Catalyst SD-WAN Manager, is being actively exploited in the wild. CVSS score: 7.8. No patch available. No workaround. The seventh Cisco SD-WAN flaw to be actively exploited this year alone.
+    </p>
+    <p>
+      The flaw sits in the command-line interface and stems from insufficient validation of user-supplied input. An authenticated attacker with netadmin privileges can upload a crafted file and execute arbitrary commands as root — full control of the underlying system. Mandiant reported the vulnerability to Cisco after observing limited real-world exploitation, including cases where attackers pushed unauthorised configuration changes to SD-WAN edge devices.
+    </p>
+
+    <div class="pull-quote">
+      "The seventh Cisco SD-WAN flaw exploited this year alone. At some point this stops being a streak and starts being a pattern."
+    </div>
+
+    <p>
+      The attack chain is the real concern. CVE-2026-20245 requires netadmin credentials — but those can be obtained by chaining it with two other already-exploited authentication bypass flaws: <strong>CVE-2026-20182</strong> and <strong>CVE-2026-20127</strong>. An attacker with no initial access can chain all three to go from the internet to root on an SD-WAN device managing up to 6,000 network endpoints.
+    </p>
+
+    <div class="teal-note">
+      <strong>What to do right now:</strong> Run <code>request admin-tech</code> on all SD-WAN control components to preserve indicators of compromise before touching anything. Then upgrade to the fixed software documented in the CVE-2026-20182 advisory — it's the closest available mitigation. Verify the configuration of all edge devices afterward.
+    </div>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://thehackernews.com/2026/06/cisco-catalyst-sd-wan-manager-cve-2026.html" target="_blank" rel="noopener">The Hacker News — Cisco Catalyst SD-WAN Manager CVE-2026-20245 Flaw Actively Exploited</a>
+      <a class="source-link" href="https://www.bleepingcomputer.com/news/security/new-cisco-sd-wan-flaw-exploited-in-zero-day-attacks-to-gain-root/" target="_blank" rel="noopener">Bleeping Computer — New Cisco SD-WAN flaw exploited in zero-day attacks to gain root</a>
+      <a class="source-link" href="https://gbhackers.com/cisco-sd-wan-security-flaw/" target="_blank" rel="noopener">GBHackers — Cisco SD-WAN Security Flaw Actively Exploited for Root-Level Command Execution</a>
+      <a class="source-link" href="https://www.helpnetsecurity.com/2026/06/05/cisco-sd-wan-cve-2026-20245-0-day-exploited/" target="_blank" rel="noopener">Help Net Security — Cisco SD-WAN 0-day exploited, no patch available</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 02 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">02 /</span>
+      <span class="section-tag">📋 Incident — OnlyFans / Data Leak</span>
+    </div>
+    <h2>A hacker sold 340 million OnlyFans records. <em>He didn't hack OnlyFans.</em>
+      <span class="threat-badge badge-watch">Unverified</span>
+    </h2>
+
+    <p>
+      A threat actor using the alias <strong>Euphoric_Reply_5727</strong> listed a dataset of 340 million alleged OnlyFans user records on a cybercrime forum, asking 0.313 BTC — roughly $76,000. The listing triggered widespread panic among creators and subscribers. The actual story is more interesting than the headline.
+    </p>
+    <p>
+      When Hackread researchers contacted the seller directly, he admitted that <em>he never breached OnlyFans</em>. The dataset was assembled by correlating data from previous breaches of Twitter, Instagram, Spotify and other platforms with publicly visible OnlyFans profiles. Old credentials matched to known usernames. Not a hack — a very large, very methodical compilation.
+    </p>
+
+    <div class="aside-note">
+      The distinction matters legally — but not practically. If your email address was in any breach from the last five years and you have an OnlyFans account, your privacy is already compromised. The dataset enables highly targeted phishing, sextortion, and identity exposure regardless of how it was assembled.
+    </div>
+
+    <p>
+      OnlyFans denied any breach of its own systems. Security researcher Tat Thang identified structural evidence suggesting the record count is inflated. But even a fraction of 340 million real, cross-referenced profiles is a significant threat to people who use the platform under any expectation of anonymity.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://cybernews.com/security/onlyfans-mega-data-leak-hackers-claim/" target="_blank" rel="noopener">Cybernews — OnlyFans mega leak reveals 340M user records, hackers claim</a>
+      <a class="source-link" href="https://www.msn.com/en-us/news/technology/did-onlyfans-get-hacked-the-truth-behind-the-viral-340m-leak/ar-AA249jAA" target="_blank" rel="noopener">MSN / Tech — Did OnlyFans get hacked? The truth behind the viral 340M leak</a>
+      <a class="source-link" href="https://securityaffairs.com/192643/cyber-crime/340-million-onlyfans-profiles-allegedly-rebuilt-from-leaks.html" target="_blank" rel="noopener">Security Affairs — 340 Million OnlyFans Profiles Allegedly Rebuilt from Leaks</a>
+      <a class="source-link" href="https://hackread.com/hacker-selling-onlyfans-user-records-old-breaches/" target="_blank" rel="noopener">Hackread — Hacker Selling 340 Million OnlyFans User Records Built From Old Breaches</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 03 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">03 /</span>
+      <span class="section-tag">🍎 Analysis — WWDC 2026 / Apple AI</span>
+    </div>
+    <h2>Apple gave Siri a Google brain today. <em>Nobody asked about the attack surface.</em></h2>
+
+    <p>
+      Tim Cook delivered his final WWDC keynote today. The headline: Siri has been entirely rebuilt on a custom Gemini model licensed from Google at roughly $1 billion per year — eight times larger than anything Apple built internally. iOS 27, macOS 27, and a multi-model Extensions system letting users choose between Gemini, ChatGPT, or Claude are all announced. The coverage is overwhelmingly positive.
+    </p>
+    <p>
+      The question nobody is asking: <strong>what does an AI-native operating system look like as an attack surface?</strong> Siri now has deeper access to contacts, messages, calendar, files, and third-party apps than any previous version. The model processes on-device where possible but routes complex requests through external inference infrastructure. Every prompt is a potential data exfiltration vector. Every app integration is a permission boundary to be tested.
+    </p>
+
+    <div class="aside-note">
+      In 2023, researchers demonstrated prompt injection attacks against LLM-integrated assistants — where malicious content in emails or documents could cause the AI to take unintended actions on behalf of the user. Apple has not published its threat model for the new Siri architecture. That silence is itself information.
+    </div>
+
+    <p>
+      The multi-model Extensions system compounds this. Three different AI providers, each with their own data retention policies, each processing user queries — potentially the same query routed differently depending on the task. The security and privacy implications of this architecture will take months to properly surface. Expect the first researcher disclosures by autumn.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://developer.apple.com/wwdc26/" target="_blank" rel="noopener">Apple — WWDC 2026 (official)</a>
+      <a class="source-link" href="https://www.techtimes.com/articles/317902/20260606/wwdc-2026-opens-monday-gemini-powers-rebuilt-siri-iphone-11-faces-ios-27-cut.htm" target="_blank" rel="noopener">TechTimes — WWDC 2026: Gemini Powers Rebuilt Siri</a>
+      <a class="source-link" href="https://www.cybersecuritydive.com/" target="_blank" rel="noopener">Cybersecurity Dive — AI surface area concerns in OS-integrated models</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 04 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">04 /</span>
+      <span class="section-tag">🔌 Patch Desk — WordPress / CVE-2026-3300</span>
+    </div>
+    <h2>Critical WordPress RCE being actively exploited. <em>Patch or pull the plugin.</em>
+      <span class="threat-badge badge-critical">CVSS 9.8</span>
+    </h2>
+
+    <p>
+      Threat actors are actively exploiting <strong>CVE-2026-3300</strong>, a critical remote code execution vulnerability in Everest Forms Pro — a WordPress plugin with approximately 4,000 active installations. CVSS score: 9.8. Unauthenticated. No user interaction required.
+    </p>
+    <p>
+      The flaw lives in the plugin's <code>process_filter()</code> function, which concatenates user-submitted form field values into a PHP string and passes it directly to <code>eval()</code> without proper escaping. Any text input field on any form — text, email, URL, select, radio — can be used to inject and execute arbitrary PHP code on the server. A patch was released on 18 March 2026 in version 1.9.13.
+    </p>
+
+    <div class="teal-note">
+      <strong>Action:</strong> If you run Everest Forms Pro, update to 1.9.13 immediately. If you can't update right now, deactivate the plugin until you can. An unauthenticated CVSS 9.8 with active exploitation means this is not a "schedule for next sprint" situation.
+    </div>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://thehackernews.com/" target="_blank" rel="noopener">The Hacker News — Hackers Exploit Critical Everest Forms Pro WordPress Plugin Flaw (June 5, 2026)</a>
+      <a class="source-link" href="https://www.wordfence.com/" target="_blank" rel="noopener">Wordfence — CVE-2026-3300 Technical Analysis</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 05 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">05 /</span>
+      <span class="section-tag">📺 Signal — Smart TV / SDK Botnet</span>
+    </div>
+    <h2>Free apps are turning your living room into <em>someone else's infrastructure.</em></h2>
+
+    <p>
+      Research published 5 June by Include Security and independent researcher Buchodi revealed that a software development kit shipped inside free apps on Samsung, LG, and Roku devices is quietly enrolling home televisions into a residential proxy network of more than <strong>150 million IP addresses</strong>.
+    </p>
+    <p>
+      The SDK is presented to users behind an opt-in consent screen, described as allowing "bandwidth sharing." In practice, the user's home IP address and internet connection are used to route third-party web scraping traffic — making it appear to originate from a residential address rather than a data centre. The company behind it, Bright Data, argues this is consensual and disclosed. The researchers argue the disclosure is buried deeply enough to be functionally invisible to most users.
+    </p>
+
+    <div class="aside-note">
+      A connected television is close to ideal for this purpose. It is almost always online, rarely rebooted, rarely monitored, and sits on the same home network as laptops, phones, and smart home devices. The immediate risk is not a hacked account — it is that your home connection and its bandwidth are being used as someone else's commercial infrastructure without meaningful consent.
+    </div>
+
+    <p>
+      This is the soft edge of the threat landscape — not a breach, not malware in the traditional sense, but a steady erosion of the boundary between "your device" and "their infrastructure." The pattern will intensify as more devices ship with SDK monetisation baked in as a default.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://thehackernews.com/" target="_blank" rel="noopener">The Hacker News — Smart TV SDK enrolling home IPs into residential proxy pool (June 5, 2026)</a>
+      <a class="source-link" href="https://www.securityweek.com/" target="_blank" rel="noopener">SecurityWeek — Bright Data SDK: 150M+ residential IPs from free TV apps</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FURTHER READING -->
+<div class="reading-section">
+  <div class="container">
+    <h3>Worth reading today</h3>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://www.helpnetsecurity.com/2026/06/05/cisco-sd-wan-cve-2026-20245-0-day-exploited/" target="_blank" rel="noopener">Help Net Security — Cisco SD-WAN 0-day exploited, no patch available</a>
+      </div>
+      <div class="reading-item-desc">The clearest technical breakdown of CVE-2026-20245, including the full attack chain and Cisco's current guidance. Required reading for anyone managing SD-WAN infrastructure.</div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://hackread.com/hacker-selling-onlyfans-user-records-old-breaches/" target="_blank" rel="noopener">Hackread — Hacker Selling 340M OnlyFans Records Built From Old Breaches</a>
+      </div>
+      <div class="reading-item-desc">The original reporting that includes the direct Telegram conversation with the seller. The source for the admission that no OnlyFans systems were directly breached.</div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://stockpil.com/worst-cyberattacks-data-breaches-2026-midyear" target="_blank" rel="noopener">Stockpil — Hacked, leaked, and held for ransom: the worst breaches of 2026 so far</a>
+      </div>
+      <div class="reading-item-desc">Published today — a mid-year review of 2026's biggest incidents. Good context for how this week's stories fit into the broader pattern of the year.</div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://developer.apple.com/wwdc26/" target="_blank" rel="noopener">Apple — WWDC 2026</a>
+      </div>
+      <div class="reading-item-desc">The primary source for today's Apple announcements. Worth reading the AI and Siri sections specifically with a security lens — note what is not said about data handling and threat modelling.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="container" style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
+    <span class="footer-brand">NODESHIELD BRIEF</span>
+    <ul class="footer-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../archive.html">Archive</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">YouTube — Coming Soon</a></li>
+    </ul>
+    <p class="footer-sign">
+      Patch the Cisco SD-WAN. Update Everest Forms. Check what your TV is doing tonight.<br />
+      Day 003 tomorrow — same time, same place.
+    </p>
+    <span class="footer-copy">© 2026 NodeShield Brief &nbsp;·&nbsp; Day 002 &nbsp;·&nbsp; nodeshield.net</span>
+  </div>
+</div>
+
+</body>
+</html>
 

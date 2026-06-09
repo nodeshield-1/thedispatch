@@ -1,7 +1,7 @@
-# The Dispatch
+# The Nodeshield
 
 Daily cybersecurity & technology briefing.
-Live at: https://thedispatch.io
+Live at: https://nodeshield.net
 
 ## Stack
 - Hosting: Netlify (free tier)

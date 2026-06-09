@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NodeShield Brief — Day 003 · 9 June 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#07090d;--bg-raise:#0c1018;--bg-card:#101520;--border:#1e2a38;--border-hi:#2a3d52;--green:#39ff9a;--green-dim:#1a7a4a;--red:#ff4444;--amber:#ffaa00;--cyan:#00d4ff;--text:#b0c8b8;--text-dim:#5a7a65;--text-hi:#ddeedd;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background-color:var(--bg);background-image:linear-gradient(rgba(57,255,154,0.028) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,0.028) 1px,transparent 1px);background-size:40px 40px;color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-weight:300;font-size:18px;line-height:1.78;-webkit-font-smoothing:antialiased;}
+  .navbar{position:sticky;top:0;z-index:100;background:rgba(7,9,13,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:48px;}
+  .nav-logo{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);text-shadow:0 0 12px rgba(57,255,154,0.4);text-decoration:none;}
+  .nav-logo span{color:var(--text-dim);}
+  .nav-links{display:flex;align-items:center;gap:1.6rem;list-style:none;}
+  .nav-links a{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.15s;}
+  .nav-links a:hover{color:var(--green);}
+  .nav-yt{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim)!important;border:1px solid var(--border-hi);padding:0.22rem 0.7rem;opacity:0.5;cursor:default!important;pointer-events:none;}
+  .nav-yt::before{content:'▶ ';font-size:0.55rem;}
+  .masthead{border-bottom:1px solid var(--border);padding:3rem 0 2rem;text-align:center;position:relative;overflow:hidden;}
+  .masthead::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(57,255,154,0.05),transparent);animation:scan 5s linear infinite;pointer-events:none;}
+  @keyframes scan{to{left:150%;}}
+  .masthead::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),var(--cyan),var(--green),transparent);}
+  .day-counter{display:inline-flex;align-items:center;gap:0.6rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border-hi);padding:0.28rem 0.9rem;margin-bottom:1.4rem;}
+  .day-dot{width:5px;height:5px;background:var(--green);border-radius:50%;box-shadow:0 0 6px var(--green);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .title-main{font-family:'DM Mono',monospace;font-weight:500;font-size:clamp(1.6rem,5.5vw,4rem);line-height:1;letter-spacing:0.05em;color:var(--green);text-shadow:0 0 20px rgba(57,255,154,0.55),0 0 60px rgba(57,255,154,0.18);text-transform:uppercase;}
+  .title-em{color:var(--cyan);text-shadow:0 0 20px rgba(0,212,255,0.55),0 0 60px rgba(0,212,255,0.18);}
+  .title-cursor{display:inline-block;width:0.55em;height:0.82em;background:var(--green);vertical-align:middle;margin-left:0.08em;box-shadow:0 0 12px var(--green);animation:blink 1.1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .masthead-rule{margin:1.4rem auto 1rem;border:none;border-top:1px solid var(--border-hi);width:80%;}
+  .masthead-meta{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;}
+  .meta-item{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);padding:0 1.4rem;border-right:1px solid var(--border-hi);}
+  .meta-item:last-child{border-right:none;}
+  .meta-item.date{color:var(--text);}
+  .container{max-width:780px;margin:0 auto;padding:0 1.5rem;}
+  .day-nav{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--border);}
+  .day-nav-btn{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;display:flex;align-items:center;gap:0.5rem;transition:color 0.15s;}
+  .day-nav-btn:hover{color:var(--green);}
+  .day-nav-btn.disabled{opacity:0.35;cursor:default;pointer-events:none;}
+  .day-nav-center{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);}
+  .yt-banner{margin:1.8rem 0 0;border:1px dashed var(--border-hi);background:var(--bg-card);padding:1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;opacity:0.55;}
+  .yt-banner-left{display:flex;align-items:center;gap:0.9rem;}
+  .yt-icon{width:32px;height:32px;background:var(--border-hi);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .yt-icon svg{width:14px;height:14px;fill:var(--text-dim);}
+  .yt-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);line-height:1.6;}
+  .yt-label strong{color:var(--text);display:block;}
+  .yt-badge{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border-hi);padding:0.22rem 0.6rem;flex-shrink:0;}
+  .lede{padding:2.4rem 0 1.8rem;border-bottom:1px solid var(--border);}
+  .lede-kicker{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--green);margin-bottom:0.7rem;display:block;}
+  .lede-kicker::before{content:'// ';opacity:0.45;}
+  .lede h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.6rem,4vw,2.5rem);line-height:1.15;letter-spacing:-0.01em;margin-bottom:1rem;color:var(--text-hi);}
+  .lede h1 em{font-style:italic;color:var(--red);}
+  .lede-body{font-size:1.05rem;color:var(--text);max-width:640px;}
+  .reading-time{display:inline-block;margin-top:1.2rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border-hi);padding:0.25rem 0.75rem;}
+  .section{padding:2.4rem 0;border-bottom:1px solid var(--border);}
+  .section:last-of-type{border-bottom:none;}
+  .segment-header{display:flex;align-items:center;gap:0.9rem;margin-bottom:1.1rem;}
+  .segment-num{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-dim);letter-spacing:0.1em;flex-shrink:0;}
+  .section-tag{display:inline-flex;align-items:center;gap:0.5rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;background:var(--bg-card);color:var(--green);border:1px solid var(--green-dim);padding:0.26rem 0.8rem;}
+  .section h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.3rem,3vw,1.85rem);line-height:1.2;letter-spacing:-0.01em;margin-bottom:1rem;color:var(--text-hi);}
+  .section h2 em{font-style:italic;color:var(--red);}
+  .section p{margin-bottom:1rem;font-size:1.02rem;color:var(--text);}
+  .section p:last-child{margin-bottom:0;}
+  strong{font-weight:600;color:var(--text-hi);}
+  .aside-note{background:rgba(255,170,0,0.06);border-left:2px solid var(--amber);padding:0.9rem 1.2rem;margin:1.4rem 0;font-style:italic;font-size:0.95rem;color:#c8a06a;}
+  .teal-note{background:rgba(57,255,154,0.05);border-left:2px solid var(--green);padding:0.9rem 1.2rem;margin:1.4rem 0;font-size:0.97rem;color:var(--text);}
+  .teal-note strong{color:var(--green);}
+  .threat-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.18rem 0.6rem;margin-left:0.5rem;vertical-align:middle;}
+  .badge-critical{background:rgba(255,68,68,0.12);color:var(--red);border:1px solid var(--red);box-shadow:0 0 8px rgba(255,68,68,0.2);}
+  .badge-high{background:rgba(255,170,0,0.1);color:var(--amber);border:1px solid var(--amber);}
+  .badge-watch{background:rgba(57,255,154,0.08);color:var(--green);border:1px solid var(--green-dim);}
+  .pull-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.1rem,2.8vw,1.45rem);line-height:1.45;color:var(--cyan);border-top:1px solid var(--cyan);border-bottom:1px solid var(--cyan);padding:1.2rem 0;margin:2rem 0;text-align:center;text-shadow:0 0 20px rgba(0,212,255,0.22);}
+  .sources{margin-top:1.8rem;padding-top:1rem;border-top:1px dashed var(--border-hi);}
+  .sources-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.55rem;display:block;}
+  .sources-label::before{content:'// ';opacity:0.45;}
+  .source-link{display:flex;align-items:baseline;gap:0.5rem;font-family:'DM Mono',monospace;font-size:0.68rem;line-height:1.65;color:var(--green-dim);text-decoration:none;transition:color 0.15s,text-shadow 0.15s;}
+  .source-link:hover{color:var(--green);text-shadow:0 0 10px rgba(57,255,154,0.35);}
+  .source-link::before{content:'↗';font-size:0.6rem;flex-shrink:0;color:var(--text-dim);transition:color 0.15s;}
+  .source-link:hover::before{color:var(--green);}
+  .reading-section{background:var(--bg-raise);border-top:1px solid var(--border-hi);padding:2.5rem 0;}
+  .reading-section h3{font-family:'DM Mono',monospace;font-weight:500;font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:1.5rem;color:var(--green);}
+  .reading-section h3::before{content:'> ';}
+  .reading-item{padding:0.9rem 0;border-bottom:1px solid var(--border);}
+  .reading-item:last-child{border-bottom:none;}
+  .reading-item-title{font-family:'Playfair Display',serif;font-weight:600;font-size:1rem;color:var(--text-hi);margin-bottom:0.3rem;}
+  .reading-item-title a{color:inherit;text-decoration:none;transition:color 0.15s;}
+  .reading-item-title a:hover{color:var(--green);}
+  .reading-item-desc{font-size:0.9rem;color:var(--text-dim);line-height:1.5;}
+  .reading-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:0.5rem;vertical-align:middle;box-shadow:0 0 6px var(--green);}
+  .footer{background:var(--bg);border-top:1px solid var(--border);padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;}
+  .footer-brand{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);text-shadow:0 0 10px rgba(57,255,154,0.3);}
+  .footer-links{display:flex;gap:2rem;list-style:none;}
+  .footer-links a{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.15s;}
+  .footer-links a:hover{color:var(--green);}
+  .footer-sign{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-dim);letter-spacing:0.1em;text-align:center;max-width:480px;}
+  .footer-copy{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);opacity:0.5;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .lede{animation:fadeUp 0.45s ease both;}
+  .section{animation:fadeUp 0.45s ease both;}
+  .section:nth-child(2){animation-delay:0.05s;}
+  .section:nth-child(3){animation-delay:0.10s;}
+  .section:nth-child(4){animation-delay:0.15s;}
+  .section:nth-child(5){animation-delay:0.20s;}
+  @media(max-width:580px){.navbar{padding:0 1rem;}.nav-links{gap:1rem;}body{font-size:16px;}.footer-links{gap:1.2rem;flex-wrap:wrap;justify-content:center;}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html">NODESHIELD <span>BRIEF</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../archive.html">Archive</a></li>
+    <li><a href="#">About</a></li>
+    <li><span class="nav-yt">YouTube</span></li>
+  </ul>
+</nav>
+
+<div class="masthead">
+  <div class="container">
+    <div class="day-counter"><span class="day-dot"></span>Day 003 &nbsp;·&nbsp; Daily Cybersecurity &amp; Technology Brief</div>
+    <div class="title-main">NODESHIELD <span class="title-em">BRIEF</span><span class="title-cursor"></span></div>
+    <hr class="masthead-rule" />
+    <div class="masthead-meta">
+      <span class="meta-item date">Tuesday, 9 June 2026</span>
+      <span class="meta-item">Cybersecurity &amp; Tech</span>
+      <span class="meta-item">~5 min read</span>
+      <span class="meta-item">5 stories</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="day-nav">
+    <a class="day-nav-btn" href="2026-06-08.html">← Day 002</a>
+    <span class="day-nav-center">[ Day 003 of 003 ]</span>
+    <a class="day-nav-btn disabled">Day 004 →</a>
+  </div>
+  <div class="yt-banner">
+    <div class="yt-banner-left">
+      <div class="yt-icon">
+        <svg viewBox="0 0 24 24"><path d="M23.5 6.2s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.6 2 12 2 12 2s-4.6 0-7.3.1c-.6.1-1.9.1-3 1.3C.8 4.2.5 6.2.5 6.2S.2 8.5.2 10.8v2.1c0 2.3.3 4.6.3 4.6s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7 21.7 12 21.8 12 21.8s4.6 0 7.3-.2c.6-.1 1.9-.1 3-1.2.9-.8 1.2-2.8 1.2-2.8s.3-2.3.3-4.6v-2.1c0-2.3-.3-4.6-.3-4.7zm-13.9 9.4V8.4l8.1 3.6-8.1 3.6z"/></svg>
+      </div>
+      <div class="yt-label">
+        <strong>Watch today's brief on YouTube</strong>
+        AI-narrated daily video summary — launching soon
+      </div>
+    </div>
+    <span class="yt-badge">Coming Soon</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="lede">
+    <span class="lede-kicker">Daily Threat Brief</span>
+    <h1>The AI assistant in your pipeline <em>just became the attack vector.</em></h1>
+    <p class="lede-body">
+      Microsoft found a prompt injection flaw in Anthropic's Claude Code GitHub Action that could silently steal your CI/CD secrets — and the same attack class hits Gemini CLI and GitHub Copilot Agent too. Oxford University disclosed its second data breach this term, courtesy of a third-party careers platform used across British universities. CISA added SolarWinds Serv-U to its KEV catalogue. And the window between vulnerability discovery and live exploit has officially collapsed to under one day. Welcome to Tuesday.
+    </p>
+    <span class="reading-time">☕ ~5 minute read &nbsp;·&nbsp; 5 stories today</span>
+  </div>
+
+  <!-- SEGMENT 01 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">01 /</span>
+      <span class="section-tag">🤖 Lead Story — Claude Code / AI Agent Security</span>
+    </div>
+    <h2>Microsoft found a prompt injection flaw in Claude Code that could steal your API keys. <em>Through a GitHub issue.</em>
+      <span class="threat-badge badge-high">Patched</span>
+    </h2>
+
+    <p>
+      Microsoft's security research team published a detailed account of a vulnerability in Anthropic's Claude Code GitHub Action — the AI coding agent that reviews pull requests, triages issues, and automates CI/CD workflows. The attack is a textbook prompt injection: an attacker posts a hidden instruction inside a GitHub issue or pull request that looks harmless to a human reviewer but is treated as a command by the AI reading it.
+    </p>
+    <p>
+      The payload Microsoft constructed was elegant in its deception. It instructed Claude to perform a <em>"compliance review"</em> — phrasing chosen specifically to avoid triggering Claude's built-in safety filters. The instruction then directed the model to read <code>/proc/self/environ</code>, which contains all environment variables for the running process, including the <code>ANTHROPIC_API_KEY</code>. To bypass GitHub's secret scanner, the payload told Claude to strip the first seven characters from the key before outputting it. The attacker reconstructs the full key by prepending <code>sk-ant-</code>.
+    </p>
+
+    <div class="pull-quote">
+      "The model's defences are inconsistent enough that the same class of attack sometimes succeeds and sometimes fails. That inconsistency is itself the vulnerability."
+    </div>
+
+    <p>
+      A second, separate research disclosure by security researcher RyotaK found that the Claude Code GitHub Action's permission check unconditionally trusted any GitHub actor whose name ended in <code>[bot]</code> — regardless of actual permissions. Since any GitHub App can open issues on public repositories using only an installation token, an unauthenticated external attacker could chain the bypass with prompt injection to gain write access to any repository using the action. RyotaK says he has reported approximately <strong>50 separate ways to bypass Claude Code's permission system</strong>.
+    </p>
+
+    <div class="teal-note">
+      <strong>Action required:</strong> Update to <code>claude-code-action v1.0.94</code> or later and Claude Code <code>2.1.128</code> or later. Audit any workflow that allows non-write users or bots to trigger Claude. Strip unnecessary secrets from runner environments. Treat any AI workflow that processes untrusted GitHub content as high-risk by default.
+    </div>
+
+    <p>
+      The same prompt injection class affects Google's Gemini CLI Action and GitHub Copilot Agent. This is not a one-vendor problem — it is an architectural problem with AI agents operating inside trust boundaries they were not designed to manage.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank" rel="noopener">Microsoft Security Blog — Securing CI/CD in an agentic world: Claude Code GitHub Action case (primary source)</a>
+      <a class="source-link" href="https://decrypt.co/370238/claude-code-vulnerability-attackers-steal-credentials-github-microsoft" target="_blank" rel="noopener">Decrypt — Claude Code Vulnerability Could Let Attackers Steal Credentials From GitHub</a>
+      <a class="source-link" href="https://cybersecuritynews.com/claude-codes-github-actions-vulnerability/" target="_blank" rel="noopener">Cybersecurity News — Claude Code GitHub Actions Flaw Created Supply Chain Attack Risk</a>
+      <a class="source-link" href="https://thenextweb.com/news/claude-code-github-action-prompt-injection-flaw" target="_blank" rel="noopener">The Next Web — Claude Code GitHub Action flaw enabled repository hijacking</a>
+      <a class="source-link" href="https://flatt.tech/research/posts/poisoning-claude-code-one-github-issue-to-break-the-supply-chain/" target="_blank" rel="noopener">Flatt Security Research — Poisoning Claude Code: One GitHub Issue to Break the Supply Chain</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 02 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">02 /</span>
+      <span class="section-tag">🎓 Field Report — Oxford University / CareerConnect</span>
+    </div>
+    <h2>Oxford's second data breach this term. <em>Same cause as every other one: a third party.</em>
+      <span class="threat-badge badge-watch">Disclosed</span>
+    </h2>
+
+    <p>
+      The University of Oxford disclosed that its CareerConnect careers platform was breached on <strong>28 May</strong> by attackers who exploited a vulnerability in the platform's third-party provider, Group GTI. Exposed data includes first names, last names, email addresses, and encrypted passwords for users who do not sign in via Single Sign-On. The platform is used by students, alumni, research staff, and employers.
+    </p>
+    <p>
+      GTI says the attack appears aimed at harvesting credentials for future phishing campaigns. The underlying vulnerability has been patched. But the wider exposure is significant: GTI markets the same platform — under the name <strong>TargetConnect</strong> — to other universities across the UK and internationally, including King's College London and the University of Manchester. The number of affected individuals across all institutions has not been confirmed.
+    </p>
+
+    <div class="aside-note">
+      This is Oxford's second major breach this term. The first was the ShinyHunters attack on Instructure's Canvas learning management system in May, which claimed 280 million records across nearly 9,000 institutions worldwide. Two breaches, both via third-party providers, both in the same academic term. The university's own systems are not compromised either time. The lesson is identical both times and is not being learned quickly enough.
+    </div>
+
+    <p>
+      GTI has not disclosed the nature of the vulnerability, the total number of affected individuals, or whether it has notified all institutions using TargetConnect. If you have a CareerConnect account at any UK university, change your password and enable two-factor authentication where available. Be alert to targeted phishing in the coming weeks.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.bleepingcomputer.com/news/security/oxford-university-discloses-data-breach-after-careerconnect-platform-hack/" target="_blank" rel="noopener">Bleeping Computer — Oxford University discloses data breach after CareerConnect hack</a>
+      <a class="source-link" href="https://cybernews.com/news/oxford-university-careers-platform-breach/" target="_blank" rel="noopener">Cybernews — Oxford University careers platform hit by third-party data breach</a>
+      <a class="source-link" href="https://www.theregister.com/security/2026/06/06/oxford-university-data-pwned-again-by-career-platform-breach/5251754" target="_blank" rel="noopener">The Register — Oxford University data pwned again by career platform breach</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 03 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">03 /</span>
+      <span class="section-tag">🔴 Patch Desk — SolarWinds / CVE-2026-28318</span>
+    </div>
+    <h2>CISA adds SolarWinds Serv-U DoS flaw to KEV. <em>Federal deadline: 19 June.</em>
+      <span class="threat-badge badge-high">Patch Now</span>
+    </h2>
+
+    <p>
+      CISA added <strong>CVE-2026-28318</strong> to its Known Exploited Vulnerabilities catalogue on 5 June, confirming active exploitation of a denial-of-service vulnerability in SolarWinds Serv-U — a managed file transfer and secure file server platform widely used in enterprise and government environments. Federal civilian agencies must remediate by <strong>19 June 2026</strong>.
+    </p>
+    <p>
+      The flaw is deceptively simple. A remote, unauthenticated attacker sends a specially crafted HTTP POST request using the <code>Content-Encoding: deflate</code> header. Serv-U attempts to process the compressed content, consumes uncontrolled resources, and crashes. No login. No phishing. No social engineering. One malformed request to an internet-facing file server and the service goes down.
+    </p>
+
+    <div class="aside-note">
+      SolarWinds does not need an introduction as a breach vector. The 2020 Sunburst supply chain attack — which compromised 18,000 organisations including US federal agencies — established the company as a high-value target. An availability flaw in an internet-facing SolarWinds product being actively exploited should be treated as urgent regardless of its CVSS score of 7.5.
+    </div>
+
+    <div class="teal-note">
+      <strong>Fix:</strong> Upgrade to SolarWinds Serv-U version <strong>15.5.4 HF1</strong>. As a temporary mitigation, limit access to Serv-U and block incoming requests containing the <code>content-encoding</code> header at your perimeter.
+    </div>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA — Known Exploited Vulnerabilities Catalog (primary source)</a>
+      <a class="source-link" href="https://securityaffairs.com/193245/security/u-s-cisa-adds-solarwinds-serv-u-flaw-to-its-known-exploited-vulnerabilities-catalog.html" target="_blank" rel="noopener">Security Affairs — CISA adds SolarWinds Serv-U flaw to Known Exploited Vulnerabilities catalog</a>
+      <a class="source-link" href="https://windowsforum.com/threads/cisa-kev-adds-solarwinds-serv-u-cve-2026-28318-patch-crash-dos-now.423158/" target="_blank" rel="noopener">Windows Forum — CISA KEV Adds SolarWinds Serv-U CVE-2026-28318: Patch Crash DoS Now</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 04 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">04 /</span>
+      <span class="section-tag">📊 Incident — Patch Window Collapse</span>
+    </div>
+    <h2>The 30-day patch cycle is dead. <em>Most boards don't know yet.</em></h2>
+
+    <p>
+      A report published this week by the Cloud Security Alliance, discussed at DataBreachToday, delivers a finding that security professionals have suspected for some time but that executive leadership has been slow to internalise: <strong>the window between vulnerability discovery and weaponised exploit has collapsed from roughly 70 days to under one day.</strong>
+    </p>
+    <p>
+      Troy Leach, Chief Strategy Officer at CSA, stated plainly that the 30-day patch cycle — still standard practice at most organisations — is already obsolete. The maths are unambiguous. If an attacker can build and deploy a working exploit within 24 hours of a CVE being published, a 30-day remediation target means your organisation is exposed for 29 days after the attacker already has a working weapon.
+    </p>
+
+    <div class="pull-quote">
+      "If an attacker can weaponise a CVE in under a day and your patch cycle is 30 days, you are not managing risk. You are documenting it."
+    </div>
+
+    <p>
+      The acceleration is AI-driven. Automated exploit generation tools can take a published CVE, analyse the affected code, and produce a working proof-of-concept in hours. The same tools that defenders use to scan for vulnerabilities are being used offensively to build exploits faster than any human red team could. The three Cisco SD-WAN flaws exploited this week alone demonstrate the pattern in practice.
+    </p>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.databreachtoday.com/" target="_blank" rel="noopener">DataBreachToday — The window between discovery and weaponised exploit has collapsed to under one day (June 5, 2026)</a>
+      <a class="source-link" href="https://www.acilearning.com/blog/the-biggest-cybersecurity-breaches-of-2026-so-far-and-the-training-that-could-have-prevented-them/" target="_blank" rel="noopener">ACI Learning — The Biggest Cybersecurity Breaches of 2026 So Far</a>
+    </div>
+  </div>
+
+  <!-- SEGMENT 05 -->
+  <div class="section">
+    <div class="segment-header">
+      <span class="segment-num">05 /</span>
+      <span class="section-tag">🌐 Signal — AI Tools as Supply Chain Targets</span>
+    </div>
+    <h2>AI coding assistants are the new software supply chain. <em>Attackers noticed before defenders did.</em></h2>
+
+    <p>
+      The Claude Code disclosure is not an isolated incident. It is one data point in a rapidly forming pattern. This year alone: a poisoned VS Code extension breached GitHub's own repositories; malicious npm packages were found designed specifically to harvest credentials from AI coding assistants; and an autonomous bot called <strong>HackerBot-Claw</strong> spent weeks probing GitHub Actions misconfigurations at Microsoft, Datadog, and CNCF projects, using prompt injection to attempt compromise of AI-based code reviewers.
+    </p>
+    <p>
+      The structural problem is straightforward. AI coding agents are granted broad permissions — they read code, write files, post comments, trigger workflows, and access secrets — because that breadth is what makes them useful. But that breadth is also what makes them dangerous if an attacker can redirect their actions. The trust model of CI/CD pipelines was designed for deterministic software. AI agents are not deterministic. The same input can produce different outputs. The same safety filter that blocks an obvious malicious instruction on one run might not block a cleverly rephrased version of it on another.
+    </p>
+
+    <div class="aside-note">
+      RyotaK's finding that Claude Code trusted any actor ending in <code>[bot]</code> is the kind of logic flaw that appears obvious in retrospect and invisible in design. It reflects how fast AI tooling is being shipped relative to how carefully it is being threat-modelled. The answer is not to stop using AI coding agents — it is to apply the same adversarial thinking to them that you would apply to any other privileged system in your pipeline.
+    </div>
+
+    <div class="sources">
+      <span class="sources-label">Sources</span>
+      <a class="source-link" href="https://www.securityweek.com/claude-code-gemini-cli-github-copilot-agents-vulnerable-to-prompt-injection-via-comments/" target="_blank" rel="noopener">SecurityWeek — Claude Code, Gemini CLI, GitHub Copilot Agents Vulnerable to Prompt Injection</a>
+      <a class="source-link" href="https://www.esecurityplanet.com/threats/claude-code-github-actions-flaw-created-supply-chain-attack-risk/" target="_blank" rel="noopener">eSecurity Planet — Claude Code GitHub Actions Flaw Created Supply Chain Attack Risk</a>
+      <a class="source-link" href="https://gbhackers.com/microsoft-warns-claude-code-github/" target="_blank" rel="noopener">GBHackers — Microsoft Warns Claude Code GitHub Action May Expose CI/CD Secrets</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="reading-section">
+  <div class="container">
+    <h3>Worth reading today</h3>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank" rel="noopener">Microsoft Security Blog — Securing CI/CD in an agentic world</a>
+      </div>
+      <div class="reading-item-desc">The primary source. Microsoft's full technical writeup including the exact prompt injection payload, the /proc/self/environ exfiltration path, and the laundering technique that bypassed Claude's safety filters. Required reading for anyone running AI agents in CI/CD.</div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://flatt.tech/research/posts/poisoning-claude-code-one-github-issue-to-break-the-supply-chain/" target="_blank" rel="noopener">Flatt Security Research — Poisoning Claude Code: One GitHub Issue to Break the Supply Chain</a>
+      </div>
+      <div class="reading-item-desc">RyotaK's disclosure of the [bot] permission bypass — the flaw that let any GitHub App trigger the workflow regardless of actual permissions. Clear, methodical, and alarming in its simplicity.</div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://www.bleepingcomputer.com/news/security/oxford-university-discloses-data-breach-after-careerconnect-platform-hack/" target="_blank" rel="noopener">Bleeping Computer — Oxford University discloses data breach after CareerConnect hack</a>
+      </div>
+      <div class="reading-item-desc">The most complete account of the GTI breach, including the second-breach context (Canvas/Instructure in May) and the list of other universities potentially affected by the same TargetConnect platform.</div>
+    </div>
+
+    <div class="reading-item">
+      <div class="reading-item-title"><span class="reading-dot"></span>
+        <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA — Known Exploited Vulnerabilities Catalog</a>
+      </div>
+      <div class="reading-item-desc">Bookmark this. Check it daily. CVE-2026-28318 (SolarWinds Serv-U) is the latest addition. Federal remediation deadline is 19 June 2026.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="container" style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
+    <span class="footer-brand">NODESHIELD BRIEF</span>
+    <ul class="footer-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../archive.html">Archive</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">YouTube — Coming Soon</a></li>
+    </ul>
+    <p class="footer-sign">
+      Update Claude Code. Reset your CareerConnect password. Patch Serv-U by June 19.<br />
+      Day 004 tomorrow — same time, same place.
+    </p>
+    <span class="footer-copy">© 2026 NodeShield Brief &nbsp;·&nbsp; Day 003 &nbsp;·&nbsp; nodeshield.net</span>
+  </div>
+</div>
+
+</body>
+</html>

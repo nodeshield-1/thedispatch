@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>NodeShield Brief — Day 004</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07090d;--bg-raise:#0c1018;--bg-card:#101520;--border:#1e2a38;--border-hi:#2a3d52;--green:#39ff9a;--green-dim:#1a7a4a;--red:#ff4444;--amber:#ffaa00;--cyan:#00d4ff;--text:#b0c8b8;--text-dim:#5a7a65;--text-hi:#ddeedd;--font-mono:'DM Mono',monospace;--font-serif:'Playfair Display',serif;--font-body:'Crimson Pro',serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background-color:var(--bg);background-image:linear-gradient(rgba(57,255,154,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,.03) 1px,transparent 1px);background-size:40px 40px;color:var(--text);font-family:var(--font-body);font-size:1.1rem;line-height:1.7;min-height:100vh;}
+nav{position:sticky;top:0;z-index:100;background:rgba(7,9,13,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:48px;}
+.nav-brand{font-family:var(--font-mono);font-size:.72rem;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{font-family:var(--font-mono);font-size:.68rem;color:var(--text-dim);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--text-hi);}
+.nav-links a.ext{color:#2a3d52;}.nav-links a.ext:hover{color:var(--text-dim);}
+.hero{max-width:860px;margin:0 auto;padding:3rem 2rem 2rem;border-bottom:1px solid var(--border);}
+.day-badge{font-family:var(--font-mono);font-size:.6rem;color:var(--text-dim);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;display:flex;align-items:center;gap:.75rem;}
+.day-live{display:flex;align-items:center;gap:.35rem;color:var(--green);}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.hero-title{font-family:var(--font-serif);font-size:clamp(2.2rem,5vw,3.2rem);color:var(--text-hi);line-height:1.1;margin-bottom:.5rem;}
+.hero-title .cursor{color:var(--green);animation:cur 1s step-end infinite;}
+@keyframes cur{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-sub{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);letter-spacing:.1em;}
+.articles{max-width:860px;margin:0 auto;padding:0 2rem 4rem;}
+.story{border-bottom:1px solid var(--border);padding:2.5rem 0;}
+.story-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;}
+.story-num{color:var(--green);}
+.story-label{color:var(--text-dim);}
+.story-tag{color:var(--cyan);}
+.story-title{font-family:var(--font-serif);font-size:1.5rem;color:var(--text-hi);line-height:1.25;margin-bottom:1rem;}
+.story-body{font-size:1.05rem;color:var(--text);line-height:1.7;margin-bottom:1rem;}
+.story-body p+p{margin-top:.75rem;}
+.story-sources{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem;}
+.src{font-family:var(--font-mono);font-size:.58rem;color:var(--text-dim);text-decoration:none;letter-spacing:.05em;border:1px solid var(--border);padding:.18rem .5rem;transition:color .2s,border-color .2s;}
+.src:hover{color:var(--green);border-color:var(--green-dim);}
+.src::after{content:' ↗';}
+.patch-table{width:100%;border-collapse:collapse;margin:1rem 0;font-family:var(--font-mono);font-size:.62rem;}
+.patch-table th{color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border);padding:.4rem .6rem;text-align:left;}
+.patch-table td{padding:.4rem .6rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
+.patch-table tbody tr:hover{background:var(--bg-raise);}
+.sev-crit{color:var(--red);}
+.sev-high{color:var(--amber);}
+.sev-med{color:var(--cyan);}
+footer{border-top:1px solid var(--border);margin:0 auto;max-width:860px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-family:var(--font-mono);font-size:.58rem;color:var(--text-dim);}
+footer a{color:var(--text-dim);text-decoration:none;}footer a:hover{color:var(--green);}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-brand">NodeShield Brief</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../archive.html">Archive</a></li>
+    <li><a href="https://nodeshield.net" class="ext">nodeshield.net ↗</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="day-badge">
+    <span class="day-live"><span class="live-dot"></span>Day 004</span>
+    <span>10 Jun 2026</span>
+  </div>
+  <h1 class="hero-title">NodeShield Brief<span class="cursor">_</span></h1>
+  <p class="hero-sub">Daily cybersecurity &amp; technology intelligence</p>
+</header>
+
+<main class="articles">
+
+  <section class="story">
+    <div class="story-header">
+      <span class="story-num">01</span>
+      <span class="story-label">Lead Story</span>
+      <span class="story-tag">Zero-Day</span>
+    </div>
+    <h2 class="story-title">Google Patches Chrome Zero-Day Actively Exploited in the Wild. Update Now, No Really.</h2>
+    <div class="story-body">
+      <p>Google issued an emergency update to the Chrome Stable channel on June 9th to patch a critical zero-day vulnerability being actively exploited in the wild. The flaw, confirmed as under active exploitation at time of release, sits in the browser's rendering engine and allows remote code execution via a crafted web page — the kind of vulnerability that requires precisely zero user interaction beyond visiting a compromised site. Google has, characteristically, withheld technical details until a sufficient proportion of the user base has updated, which is the correct call and also the one that guarantee half the enterprise fleet will still be running the vulnerable version in three months.</p>
+      <p>Users and administrators should verify Chrome has updated to the latest Stable channel build. Enterprise environments running managed Chrome deployments should treat this as a priority push. The vulnerability is being tracked; full CVE assignment and technical disclosure are expected once Google considers the patch coverage adequate.</p>
+    </div>
+    <div class="story-sources">
+      <a href="https://cybersecuritynews.com/" class="src" target="_blank" rel="noopener">CyberSecurity News</a>
+      <a href="https://thehackernews.com/" class="src" target="_blank" rel="noopener">The Hacker News</a>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="story-header">
+      <span class="story-num">02</span>
+      <span class="story-label">Field Report</span>
+      <span class="story-tag">Authentication Bypass</span>
+    </div>
+    <h2 class="story-title">Check Point VPN Auth Bypass: CVE-2026-50751. CVSS 9.3. No Password Required.</h2>
+    <div class="story-body">
+      <p>Check Point has disclosed CVE-2026-50751, a logic flaw in certificate validation affecting its Remote Access VPN and Mobile Access products, scoring a very comfortable 9.3 on the CVSS scale. The vulnerability allows an unauthenticated remote attacker to establish a VPN session without a valid password by exploiting a flaw in how the product validates certificates. Check Point's own advisory notes that "additional post-authentication activity is required to access internal resources" — which is doing a lot of work as a reassurance, given that the attacker has already bypassed authentication entirely.</p>
+      <p>Patches are available. The vulnerability was confirmed as exploited in zero-day attacks prior to disclosure. Affected products include several versions of Check Point's Remote Access VPN and Mobile Access deployments. Organisations running these products should apply the update immediately and audit VPN access logs for anomalous sessions from the prior weeks.</p>
+    </div>
+    <div class="story-sources">
+      <a href="https://thehackernews.com/" class="src" target="_blank" rel="noopener">The Hacker News</a>
+      <a href="https://www.bleepingcomputer.com/" class="src" target="_blank" rel="noopener">BleepingComputer</a>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="story-header">
+      <span class="story-num">03</span>
+      <span class="story-label">Patch Desk</span>
+      <span class="story-tag">CVE / Patch</span>
+    </div>
+    <h2 class="story-title">SAP June Patch Day: 15 Notes. Fortinet FortiSandbox RCE. Apache HTTP Server 2.4.68.</h2>
+    <div class="story-body">
+      <p>Patch Tuesday adjacent: SAP's June 2026 Security Patch Day delivered 15 new security notes covering vulnerabilities across core SAP products. Fortinet simultaneously disclosed a critical flaw in FortiSandbox allowing unauthenticated remote attackers to execute arbitrary OS commands. Apache released HTTP Server version 2.4.68, patching 13 vulnerabilities across multiple modules. A busy week for patch management teams, and an even busier week for the people explaining to leadership why the maintenance window can't wait until next quarter.</p>
+    </div>
+    <table class="patch-table">
+      <thead><tr><th>CVE</th><th>Severity</th><th>Product</th><th>Summary</th></tr></thead>
+      <tbody>
+        <tr><td>CVE-2026-50751</td><td class="sev-crit">Critical</td><td>Check Point VPN</td><td>Auth bypass via certificate validation logic flaw — no password required</td></tr>
+        <tr><td>CVE-2026-23111</td><td class="sev-high">High (7.8)</td><td>Linux Kernel (nf_tables)</td><td>Use-after-free, unprivileged local user to root + container escape. Working exploit public.</td></tr>
+        <tr><td>—</td><td class="sev-crit">Critical</td><td>Fortinet FortiSandbox</td><td>Unauthenticated RCE via OS command injection</td></tr>
+        <tr><td>SAP June</td><td class="sev-high">High</td><td>SAP Core Products</td><td>15 security notes across SAP product suite</td></tr>
+        <tr><td>—</td><td class="sev-med">Medium–High</td><td>Apache HTTP 2.4.68</td><td>13 vulnerabilities patched across multiple modules</td></tr>
+      </tbody>
+    </table>
+    <div class="story-sources">
+      <a href="https://cybersecuritynews.com/" class="src" target="_blank" rel="noopener">CyberSecurity News</a>
+      <a href="https://thehackernews.com/" class="src" target="_blank" rel="noopener">The Hacker News</a>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="story-header">
+      <span class="story-num">04</span>
+      <span class="story-label">Incident</span>
+      <span class="story-tag">Data Breach</span>
+    </div>
+    <h2 class="story-title">Illuminate Education Leaks 10 Million Student Records. Via a 10-Year-Old Password. From a Former Employee.</h2>
+    <div class="story-body">
+      <p>Illuminate Education, a software company providing services to educational institutions across the United States, has exposed data belonging to more than 10 million students. The breach was facilitated by a ten-year-old password created by an employee who left the company a decade ago and whose access credentials were apparently never revoked. This is the kind of incident that makes information security professionals stare at the ceiling at 3am — not because it is technically sophisticated, but because it isn't. A decade. The credentials sat there for a decade. The data includes student records, the specific contents of which have not been fully disclosed but which, given the nature of Illuminate's products, are likely to be extensive.</p>
+      <p>Also this week: Meta disclosed that 20,225 Instagram accounts were hijacked in an incident where attackers used Meta's AI-powered support system to reset passwords. The University of Oxford disclosed a breach of its CareerConnect platform via third-party provider Group GTI. The Silent Ransom Group is actively targeting US law firms with social engineering campaigns that result in data theft within hours of initial compromise.</p>
+    </div>
+    <div class="story-sources">
+      <a href="https://cybernews.com/" class="src" target="_blank" rel="noopener">Cybernews</a>
+      <a href="https://www.bleepingcomputer.com/" class="src" target="_blank" rel="noopener">BleepingComputer</a>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="story-header">
+      <span class="story-num">05</span>
+      <span class="story-label">Signal</span>
+      <span class="story-tag">Policy</span>
+    </div>
+    <h2 class="story-title">Signal Calls UK Device Scanning "Dystopian". The UK Government Has Not Appeared to Notice.</h2>
+    <div class="story-body">
+      <p>Signal has publicly condemned proposed UK legislation that would require messaging platforms to scan user devices for prohibited content, characterising the approach as "dystopian" and incompatible with end-to-end encryption. The criticism is both accurate and familiar — Signal, along with WhatsApp and others, has made this argument consistently since the UK's Online Safety Act moved through Parliament. The fundamental technical problem remains unchanged: client-side scanning of encrypted communications requires breaking the encryption model that makes the communications private, regardless of how the legislative framing describes the mechanism. Signal has previously indicated it would exit the UK market rather than comply with such requirements. The UK government has previously indicated it is confident a technical solution exists. These two positions are not reconcilable.</p>
+    </div>
+    <div class="story-sources">
+      <a href="https://cybernews.com/" class="src" target="_blank" rel="noopener">Cybernews</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>© 2026 NodeShield Brief</span>
+  <span>cyber.nodeshield.net</span>
+  <span><a href="https://nodeshield.net">nodeshield.net ↗</a></span>
+</footer>
+</body>
+</html>

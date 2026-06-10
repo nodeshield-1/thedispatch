@@ -4,7 +4,7 @@ Daily cybersecurity & technology briefing.
 Live at: https://nodeshield.net
 
 ## Stack
-- Hosting: Netlify (free tier)
+- Hosting: Cloudflare 
 - DNS/Domain: Cloudflare
 - Repo: GitHub (auto-deploy on push)
 

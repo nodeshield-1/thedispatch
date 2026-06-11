@@ -1,90 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>NodeShield Brief &mdash; Archive</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,700&family=Crimson+Pro:wght@300;400&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NodeShield Brief — Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@600;700;800&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07090d;--bg-raise:#0c1018;--border:#1e2a38;--green:#39ff9a;--green-dim:#1a7a4a;--cyan:#00d4ff;--text:#b0c8b8;--text-dim:#5a7a65;--text-hi:#ddeedd;--font-mono:'DM Mono',monospace;--font-serif:'Playfair Display',serif;--font-body:'Crimson Pro',serif;}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{background-color:var(--bg);background-image:linear-gradient(rgba(57,255,154,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,.03) 1px,transparent 1px);background-size:40px 40px;color:var(--text);font-family:var(--font-body);font-size:1.1rem;line-height:1.7;min-height:100vh;}
-nav{position:sticky;top:0;z-index:100;background:rgba(7,9,13,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:48px;}
-.nav-brand{font-family:var(--font-mono);font-size:.72rem;color:var(--green);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;}
-.nav-links{display:flex;gap:1.75rem;list-style:none;}
-.nav-links a{font-family:var(--font-mono);font-size:.68rem;color:var(--text-dim);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
-.nav-links a:hover{color:var(--text-hi);}
-.nav-links a.active{color:var(--green);}
-.nav-links a.ext{color:#2a3d52;}.nav-links a.ext:hover{color:var(--text-dim);}
-.hero{max-width:860px;margin:0 auto;padding:3rem 2rem 2rem;border-bottom:1px solid var(--border);}
-.hero-label{font-family:var(--font-mono);font-size:.62rem;color:var(--cyan);letter-spacing:.22em;text-transform:uppercase;margin-bottom:.8rem;}
-.hero-title{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--text-hi);line-height:1.12;margin-bottom:.4rem;}
-.hero-sub{font-family:var(--font-body);font-size:1rem;color:var(--text-dim);font-style:italic;}
-.wrap{max-width:860px;margin:0 auto;padding:2.5rem 2rem 4rem;}
-.month{font-family:var(--font-mono);font-size:.6rem;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;padding-bottom:.6rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
-.entry{display:flex;align-items:center;gap:1.25rem;padding:.9rem .75rem;border-bottom:1px solid var(--border);text-decoration:none;transition:background .15s;}
-.entry:hover{background:var(--bg-raise);}
-.entry-latest{border-left:2px solid var(--green);padding-left:1rem;}
-.e-day{font-family:var(--font-mono);font-size:.68rem;color:var(--green);letter-spacing:.06em;flex-shrink:0;width:75px;}
-.e-date{font-family:var(--font-mono);font-size:.6rem;color:var(--text-dim);letter-spacing:.08em;flex-shrink:0;width:105px;}
-.e-title{font-family:var(--font-body);font-size:1rem;color:var(--text-hi);flex:1;}
-.e-arrow{font-family:var(--font-mono);font-size:.7rem;color:var(--text-dim);flex-shrink:0;transition:color .2s;}
-.entry:hover .e-arrow{color:var(--green);}
-.live-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-left:.4rem;vertical-align:middle;animation:blink 1.5s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-.count{display:block;font-family:var(--font-mono);font-size:.6rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);}
-footer{border-top:1px solid var(--border);margin:0 auto;max-width:860px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-family:var(--font-mono);font-size:.58rem;color:var(--text-dim);}
-footer a{color:var(--text-dim);text-decoration:none;}footer a:hover{color:var(--green);}
+:root{--bg:#07090d;--bg-2:#0b0f15;--ink:#cfd6dd;--ink-dim:#7d8893;--green:#39ff9a;--line:rgba(57,255,154,.18);
+--mono:'DM Mono',monospace;--serif:'Playfair Display',serif;--body:'Crimson Pro',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6;
+background-image:linear-gradient(rgba(57,255,154,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,.03) 1px,transparent 1px);background-size:42px 42px}
+a{color:var(--green);text-decoration:none}
+.navbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:rgba(7,9,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.navbar .brand{color:var(--green);letter-spacing:.08em}
+.navbar nav a{color:var(--ink-dim);margin-left:22px}
+.navbar nav a:hover{color:var(--green)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 64px}
+header.hero{padding:64px 0 36px}
+.hero-label{font-family:var(--mono);font-size:13px;color:var(--green);letter-spacing:.18em;margin-bottom:14px}
+h1{font-family:var(--serif);font-size:clamp(32px,5vw,46px);color:#eef3f6}
+.hero-sub{margin-top:12px;color:var(--ink-dim);font-style:italic}
+.month{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:.2em;margin:34px 0 14px}
+.entry{display:block;border:1px solid var(--line);background:var(--bg-2);padding:20px 22px;margin-bottom:14px;transition:border-color .15s}
+.entry:hover{border-color:var(--green)}
+.entry-meta{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:.14em;margin-bottom:8px}
+.entry h2{font-family:var(--serif);font-size:22px;color:#e8eef2;margin-bottom:6px}
+.entry p{color:var(--ink-dim);font-size:17px}
+.entry-latest{border-left:3px solid var(--green)}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.footer{margin-top:42px;font-family:var(--mono);font-size:12px;color:var(--ink-dim)}
 </style>
 </head>
 <body>
-<nav>
-  <a href="/index.html" class="nav-brand">NodeShield Brief</a>
-  <ul class="nav-links">
-    <li><a href="/index.html">Home</a></li>
-    <li><a href="/archive.html" class="active">Archive</a></li>
-    <li><a href="https://nodeshield.net" class="ext">nodeshield.net ↗</a></li>
-  </ul>
-</nav>
-<header class="hero">
-  <p class="hero-label">// All Editions</p>
-  <h1 class="hero-title">The Back Catalogue</h1>
-  <p class="hero-sub">Every brief, from Day 001 onwards.</p>
-</header>
-<div class="wrap">
-  <p class="month">// June 2026</p>
-
-  <a href="daily/2026-06-10.html" class="entry entry-latest">
-    <span class="e-day">Day 004<span class="live-dot"></span></span>
-    <span class="e-date">10 Jun 2026</span>
-    <span class="e-title">Record Patch Tuesday: ~200 CVEs, First AI-Reported Flaw, BitLocker Zero-Day, Hyper-V Escapes, VS Code Token Theft</span>
-    <span class="e-arrow">&#8599;</span>
-  </a>
-  <a href="daily/2026-06-09.html" class="entry">
-    <span class="e-day">Day 003</span>
-    <span class="e-date">09 Jun 2026</span>
-    <span class="e-title">Day 003 &mdash; 09 Jun 2026</span>
-    <span class="e-arrow">&#8599;</span>
-  </a>
-  <a href="daily/2026-06-08.html" class="entry">
-    <span class="e-day">Day 002</span>
-    <span class="e-date">08 Jun 2026</span>
-    <span class="e-title">Day 002 &mdash; 08 Jun 2026</span>
-    <span class="e-arrow">&#8599;</span>
-  </a>
-  <a href="daily/2026-06-07.html" class="entry">
-    <span class="e-day">Day 001</span>
-    <span class="e-date">07 Jun 2026</span>
-    <span class="e-title">Day 001 &mdash; 07 Jun 2026</span>
-    <span class="e-arrow">&#8599;</span>
-  </a>
-
-  <span class="count">4 editions published &mdash; updated daily</span>
+<div class="navbar">
+  <span class="brand">NODESHIELD://BRIEF</span>
+  <nav><a href="index.html">Home</a><a href="archive.html">Archive</a><a href="https://nodeshield.net">nodeshield.net ↗</a></nav>
 </div>
-<footer>
-  <span>&copy; 2026 NodeShield Brief</span>
-  <span>cyber.nodeshield.net</span>
-  <span><a href="https://nodeshield.net">nodeshield.net ↗</a></span>
-</footer>
+<div class="wrap">
+<header class="hero">
+  <div class="hero-label">// ALL EDITIONS</div>
+  <h1>The Back Catalogue</h1>
+  <p class="hero-sub">Every brief from Day 001 onwards.</p>
+</header>
+
+<p class="month">// JUNE 2026</p>
+
+<a class="entry entry-latest" href="daily/2026-06-11.html">
+  <div class="entry-meta">DAY 005 · 11 JUNE 2026<span class="live-dot"></span></div>
+  <h2>Patched at Record Pace, Rooted Anyway</h2>
+  <p>RoguePlanet Defender zero-day PoC lands a day after the record Patch Tuesday · World Cup fraud goes live on kickoff day · Veeam 9.4 RCE · Tchap breach · autonomous AI worms.</p>
+</a>
+
+<a class="entry" href="daily/2026-06-10.html">
+  <div class="entry-meta">DAY 004 · 10 JUNE 2026</div>
+  <h2>The Machines Found the Bugs</h2>
+  <p>A record Patch Tuesday as symptom: Codex becomes the first AI credited with a CVE in a Microsoft advisory, and Mythos accelerates the exploitation side of the equation. 200 is the new floor.</p>
+</a>
+
+<!-- TODO: confirmar títulos reais dos Days 001–003 antes de publicar -->
+<a class="entry" href="daily/2026-06-09.html">
+  <div class="entry-meta">DAY 003 · 9 JUNE 2026</div>
+  <h2>[TÍTULO REAL — Day 003]</h2>
+  <p>[Resumo de uma linha — Day 003]</p>
+</a>
+
+<a class="entry" href="daily/2026-06-08.html">
+  <div class="entry-meta">DAY 002 · 8 JUNE 2026</div>
+  <h2>[TÍTULO REAL — Day 002]</h2>
+  <p>[Resumo de uma linha — Day 002]</p>
+</a>
+
+<a class="entry" href="daily/2026-06-07.html">
+  <div class="entry-meta">DAY 001 · 7 JUNE 2026</div>
+  <h2>[TÍTULO REAL — Day 001]</h2>
+  <p>[Resumo de uma linha — Day 001]</p>
+</a>
+
+<p class="footer">5 briefs published — updated daily &nbsp;·&nbsp; © 2026 NodeShield Brief &nbsp;·&nbsp; <a href="https://nodeshield.net">nodeshield.net ↗</a></p>
+</div>
 </body>
 </html>

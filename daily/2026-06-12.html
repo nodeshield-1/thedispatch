@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NodeShield Brief — Day 006 · Actively Exploited, Nobody Home</title>
+<meta name="description" content="An unpatched flaw in Langflow is under active exploitation while the maintainers stay silent. The AI gold rush is built on scaffolding nobody maintains.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@600;700;800&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090d; --bg-2:#0b0f15; --ink:#cfd6dd; --ink-dim:#7d8893;
+  --green:#39ff9a; --green-dim:rgba(57,255,154,.14); --line:rgba(57,255,154,.18);
+  --mono:'DM Mono',monospace; --serif:'Playfair Display',serif; --body:'Crimson Pro',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.65;
+  background-image:linear-gradient(rgba(57,255,154,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,.03) 1px,transparent 1px);
+  background-size:42px 42px}
+a{color:var(--green);text-decoration:none}
+a:hover{text-decoration:underline}
+.navbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 28px;background:rgba(7,9,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.navbar .brand{color:var(--green);font-weight:500;letter-spacing:.08em}
+.navbar nav a{color:var(--ink-dim);margin-left:22px}
+.navbar nav a:hover{color:var(--green);text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--line)}
+.day-counter{font-family:var(--mono);font-size:13px;color:var(--green);letter-spacing:.18em;margin-bottom:18px}
+.day-counter .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1.title{font-family:var(--serif);font-size:clamp(34px,5.5vw,52px);line-height:1.12;color:#eef3f6}
+h1.title::after{content:'_';color:var(--green);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.standfirst{margin-top:20px;font-size:21px;color:var(--ink-dim);font-style:italic}
+.seg{padding:48px 0;border-bottom:1px solid var(--line)}
+.seg-label{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:.22em;margin-bottom:14px}
+.seg h2{font-family:var(--serif);font-size:28px;line-height:1.25;color:#e8eef2;margin-bottom:16px}
+.seg p{margin-bottom:16px}
+.seg p:last-of-type{margin-bottom:0}
+.pull{border-left:2px solid var(--green);padding:6px 0 6px 18px;margin:22px 0;font-style:italic;color:#aeb8c0;font-size:20px}
+.sources{margin-top:20px;font-family:var(--mono);font-size:12px;color:var(--ink-dim)}
+.sources a{margin-right:14px;color:var(--ink-dim);border-bottom:1px dotted var(--line)}
+.sources a:hover{color:var(--green);text-decoration:none}
+.kv{font-family:var(--mono);font-size:14px;background:var(--bg-2);border:1px solid var(--line);padding:16px 18px;margin:20px 0;line-height:1.9}
+.kv .k{color:var(--green)}
+.prevnext{display:flex;justify-content:space-between;padding:36px 0;font-family:var(--mono);font-size:13px}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:28px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--ink-dim)}
+@media(max-width:560px){body{font-size:18px}.navbar nav a{margin-left:14px}}
+</style>
+</head>
+<body>
+<div class="navbar">
+  <span class="brand">NODESHIELD://BRIEF</span>
+  <nav><a href="../index.html">Home</a><a href="../archive.html">Archive</a><a href="https://nodeshield.net">nodeshield.net ↗</a></nav>
+</div>
+
+<div class="wrap">
+<header class="hero">
+  <div class="day-counter"><span class="dot"></span>DAY 006 · 12 JUNE 2026 · DAILY INTELLIGENCE</div>
+  <h1 class="title">Actively Exploited, Nobody Home</h1>
+  <p class="standfirst">An 8.8-severity flaw in Langflow — the open-source platform thousands use to build AI applications — is being exploited in the wild. There is no patch. The maintainers have not answered a disclosure attempt since January. This is what the AI gold rush is actually built on.</p>
+</header>
+
+<section class="seg">
+  <div class="seg-label">01 // LEAD STORY</div>
+  <h2>Langflow: the AI boom's scaffolding is unmaintained, and attackers noticed first</h2>
+  <p>The vulnerability itself is almost boring: CVE-2026-5027, a path traversal in Langflow's file-upload endpoint that doesn't sanitise the filename parameter, letting an attacker write files to arbitrary locations on the filesystem — the classic <span style="font-family:var(--mono);font-size:15px">../</span> trick, CVSS 8.8, now under active exploitation according to VulnCheck. What elevates it to a lead story is everything around it.</p>
+  <p>Tenable, which found the flaw, says it tried to reach the project's maintainers three times across January and February before going public in late March. Silence. It is now mid-June: the vulnerability is being exploited in the wild and there is still no patch. Langflow isn't an obscure library — it's one of the most popular low-code platforms for assembling AI applications, the kind of tool that sits in the build pipeline of countless startups racing to ship "AI-powered" products this quarter.</p>
+  <div class="pull">The industry is pouring billions into AI applications and approximately nothing into the unpaid open-source plumbing they all stand on. Attackers have read that balance sheet.</div>
+  <p>The critical reading: this is the xz-utils lesson refusing to be learned, with an AI accent. Venture capital prices the application layer; nobody prices maintenance. When a project this widely deployed can go silent for five months with a known, exploitable, unauthenticated file-write bug, "open source supply chain risk" stops being a compliance checkbox and becomes a live operational question. If Langflow is anywhere in your stack: take it off the public internet today, firewall the API, and treat any exposed instance as potentially compromised — file-write primitives rarely stay file-write primitives for long.</p>
+  <div class="sources">SOURCES: <a href="https://thehackernews.com" target="_blank" rel="noopener">The Hacker News</a><a href="https://www.securityweek.com" target="_blank" rel="noopener">SecurityWeek</a></div>
+</section>
+
+<section class="seg">
+  <div class="seg-label">02 // FIELD REPORT</div>
+  <h2>JDY rises again: 1,500 routers quietly mapping the internet for Beijing</h2>
+  <p>Black Lotus Labs is warning of a "resurgence and expansion" of JDY, a covert network of more than 1,500 compromised SOHO routers, firewalls and IoT devices operating as a centrally controlled, high-performance scanner — discovering, fingerprinting and continuously mapping exposed services at scale. The lineage matters: JDY emerged as a cluster within KV-botnet, the infrastructure used by Volt Typhoon, the China-nexus group that pre-positions inside critical infrastructure. The US government took KV-botnet down in early 2024. The operators adapted, went quiet, and rebuilt.</p>
+  <p>Read this next to today's lead and the picture is uncomfortable in a specific way: JDY is the reconnaissance layer. A botnet that continuously maps exposed services pairs very naturally with a world where unpatched, actively exploitable flaws sit in public for months. One side builds the target list; the other side is the target list. Your perimeter devices — the routers and firewalls nobody updates — are not the things being protected. Increasingly, they are the things doing the scanning.</p>
+  <div class="sources">SOURCES: <a href="https://thehackernews.com" target="_blank" rel="noopener">The Hacker News</a></div>
+</section>
+
+<section class="seg">
+  <div class="seg-label">03 // PATCH DESK</div>
+  <h2>Ivanti rooted, Oracle's quiet mitigation, and CISA rewrites the deadline rules</h2>
+  <div class="kv">
+<span class="k">IVANTI SENTRY</span>  Attackers are targeting a recently patched maximum-severity flaw, executing code with root privileges on internet-exposed servers. Patch was available; exposure window did the damage. Verify your version, then audit for compromise.<br><br>
+<span class="k">ORACLE</span>  Mitigations released for CVE-2026-35273 — with Oracle declining to say whether it was the zero-day used in the ShinyHunters attacks. The silence is its own advisory.<br><br>
+<span class="k">CHECK POINT</span>  Warning of a zero-day flaw being targeted by a ransomware affiliate. Security products remain the most valuable doors in the building — see also Day 005's Defender PoC.<br><br>
+<span class="k">CISA BOD 26-04</span>  New binding directive gives federal agencies risk-tiered remediation deadlines for KEV-listed flaws, replacing one-size-fits-all timelines. Sensible policy — and an implicit admission that the patch volume of 2026 has made "fix everything fast" arithmetically impossible.
+  </div>
+  <div class="sources">SOURCES: <a href="https://www.bleepingcomputer.com/news/security/" target="_blank" rel="noopener">BleepingComputer</a><a href="https://www.securityweek.com" target="_blank" rel="noopener">SecurityWeek</a><a href="https://www.cybersecuritydive.com" target="_blank" rel="noopener">Cybersecurity Dive</a></div>
+</section>
+
+<section class="seg">
+  <div class="seg-label">04 // INCIDENT</div>
+  <h2>University of Nottingham: student records breached, alumni included</h2>
+  <p>The University of Nottingham confirmed a hacking group gained access to its student records system, affecting current students and alumni. Universities keep getting hit for the same structural reason: they hold bank-grade personal data behind academia-grade budgets, spread across decades of legacy systems and thousands of loosely managed accounts. The alumni detail is the part to sit with — your data outlives your relationship with every institution that ever collected it.</p>
+  <div class="sources">SOURCES: <a href="https://www.bleepingcomputer.com" target="_blank" rel="noopener">BleepingComputer</a></div>
+</section>
+
+<section class="seg">
+  <div class="seg-label">05 // SIGNAL</div>
+  <h2>The week's verdict, from the people who would know</h2>
+  <p>Closing the arc this brief has tracked since Day 004: industry veterans including Kevin Mandia and Alex Stamos are now saying plainly that AI is finding bugs faster than anyone can fix them, and that exploit development is accelerating beyond most organisations' capacity to respond. Meanwhile, governments and financial institutions are reviewing the risks of advanced models that have already surfaced thousands of vulnerabilities — capability impressive enough to be deliberately restricted over misuse concerns.</p>
+  <p>Put the week in one sentence: discovery is automated (Day 004's record Patch Tuesday), the gap is public (Day 005's RoguePlanet PoC), the scaffolding is unmaintained (today's Langflow), and the people who built modern incident response are saying the fix side has lost the race's current lap. The honest conclusion isn't despair — it's that defence has to automate the way offence already has, and that "we patch quarterly" is now a threat-model confession.</p>
+  <div class="sources">SOURCES: <a href="https://cyberscoop.com" target="_blank" rel="noopener">CyberScoop</a></div>
+</section>
+
+<div class="prevnext">
+  <a href="2026-06-11.html">← Day 005</a>
+  <span style="color:var(--ink-dim)">Day 007 →</span>
+</div>
+</div>
+
+<footer>
+  <span>© 2026 NodeShield Brief</span>
+  <span>cyber.nodeshield.net</span>
+  <span><a href="https://nodeshield.net">nodeshield.net ↗</a></span>
+</footer>
+</body>
+</html>

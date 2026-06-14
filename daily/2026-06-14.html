@@ -64,6 +64,7 @@
   figure.photo{margin:1.3rem 0;border:1px solid var(--border-hi);border-radius:12px;overflow:hidden;background:var(--bg-raise)}
   figure.photo a{display:block}
   figure.photo img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;filter:saturate(1.05)}
+  figure.photo svg{display:block;width:100%;height:auto}
   figure.photo figcaption{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text-dim);padding:.55rem .9rem;border-top:1px solid var(--border)}
   .spotlight{border:1px solid var(--red);border-radius:12px;padding:1.2rem 1.4rem;margin:1.5rem 0;background:rgba(255,84,112,0.05);backdrop-filter:blur(6px)}
   .spotlight .sl-top{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;flex-wrap:wrap}
@@ -226,8 +227,25 @@
     <span class="tag">Disinformation</span>
     <h2 class="head">The breaches that never happened</h2>
     <figure class="photo">
-      <a href="https://www.youtube.com/watch?v=K_fpEESx5UI" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/K_fpEESx5UI/hqdefault.jpg" alt="VRChat — official platform trailer" /></a>
-      <figcaption>VRChat &mdash; the platform whose 2.4M-user "breach" was a fabricated filing it never submitted. (VRChat / YouTube)</figcaption>
+      <svg viewBox="0 0 640 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fabricated breach filing stamped HOAX">
+        <rect width="640" height="360" fill="#070d10"/>
+        <g stroke="#10301f" stroke-width="1" opacity=".6"><line x1="0" y1="90" x2="640" y2="90"/><line x1="0" y1="180" x2="640" y2="180"/><line x1="0" y1="270" x2="640" y2="270"/></g>
+        <g transform="rotate(-4 320 180)">
+          <rect x="196" y="64" width="248" height="232" rx="6" fill="#0d141b" stroke="#26394e"/>
+          <text x="216" y="96" font-family="DM Mono,monospace" font-size="11" fill="#52705f">STATE OF MAINE &#183; AG BREACH PORTAL</text>
+          <text x="216" y="122" font-family="Playfair Display,serif" font-weight="700" font-size="19" fill="#e7f6ec">Notice of Data Breach</text>
+          <g stroke="#1c3a2a" stroke-width="6" stroke-linecap="round"><line x1="216" y1="150" x2="420" y2="150"/><line x1="216" y1="172" x2="402" y2="172"/><line x1="216" y1="194" x2="412" y2="194"/></g>
+          <text x="216" y="232" font-family="DM Mono,monospace" font-size="12" fill="#9fbcab">VRChat &#183; 2,436,782 users</text>
+          <text x="216" y="254" font-family="DM Mono,monospace" font-size="12" fill="#9fbcab">Discord &#183; 10,000,000 users</text>
+        </g>
+        <g transform="rotate(-14 384 198)">
+          <rect x="300" y="170" width="170" height="56" rx="6" fill="none" stroke="#ff5470" stroke-width="4"/>
+          <text x="385" y="209" text-anchor="middle" font-family="Orbitron,sans-serif" font-weight="800" font-size="30" fill="#ff5470">HOAX</text>
+        </g>
+        <rect x="0" y="118" width="640" height="3" fill="#39ff9a" opacity=".5"/><rect x="0" y="242" width="640" height="2" fill="#36e0ff" opacity=".4"/>
+        <text x="24" y="340" font-family="DM Mono,monospace" font-size="12" fill="#39ff9a">STATUS: FABRICATED &#183; NEVER SUBMITTED</text>
+      </svg>
+      <figcaption>Fabricated breach filings for VRChat and Discord were planted on Maine's official portal &mdash; and published unverified.</figcaption>
     </figure>
     <p>This week's most instructive incident is one that didn't occur. Fabricated breach notices naming <strong>VRChat</strong> (2.4 million users) and <strong>Discord</strong> (10 million) were filed on Maine's official Attorney General portal and published almost immediately &mdash; no verification required. VRChat says it never filed; the employee named on the notice does not exist. Maine pulled the filings on 12 June, called them hoaxes, and took the public portal offline.</p>
     <p>Sit with the elegance of it. Security teams, journalists and class-action lawyers treat that portal as ground truth &mdash; records propagate into news alerts, risk dashboards and litigation databases within hours. An attacker who plants a false entry manufactures a "confirmed breach" out of nothing: instant phishing pretext, instant stock pressure, instant panic. You no longer need to steal the data. You only need everyone to believe you did.</p>

@@ -4,14 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NodeShield Brief — Day 008 · 14 June 2026</title>
-<meta name="description" content="Daily cybersecurity intelligence. Day 008: ShinyHunters claim the Knicks' owner on title night, a record Patch Tuesday, and breaches that never happened." />
+<meta name="description" content="Daily cybersecurity intelligence. Day 008: ShinyHunters claim another household name, a record 208-CVE Patch Tuesday, and breaches that never happened." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#07090d; --bg-raise:#0c1018; --bg-card:#101520;
     --border:#1e2a38; --border-hi:#2a3d52;
-    --green:#39ff9a; --green-dim:#1a7a4a; --green-glow:rgba(57,255,154,0.15);
+    --green:#39ff9a; --green-dim:#1a7a4a; --green-glow:rgba(57,255,154,0.18);
     --red:#ff4444; --amber:#ffaa00; --cyan:#00d4ff;
     --text:#b0c8b8; --text-dim:#5a7a65; --text-hi:#ddeedd;
     --accent:var(--green);
@@ -22,8 +22,7 @@
     background-color:var(--bg);
     background-image:linear-gradient(rgba(57,255,154,0.028) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,154,0.028) 1px,transparent 1px);
     background-size:40px 40px;
-    color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-weight:300;
-    font-size:18px;line-height:1.78;-webkit-font-smoothing:antialiased;
+    color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-weight:300;font-size:18px;line-height:1.78;-webkit-font-smoothing:antialiased;
   }
   .navbar{position:sticky;top:0;z-index:100;background:rgba(7,9,13,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:48px}
   .nav-logo{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);text-shadow:0 0 12px var(--green-glow);text-decoration:none}
@@ -31,55 +30,80 @@
   .nav-links{display:flex;align-items:center;gap:1.5rem;list-style:none}
   .nav-links a,.nav-links span{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color .2s}
   .nav-links a:hover{color:var(--accent)}
-  .nav-links a.ext{color:#2a3d52}
-  .nav-links a.ext:hover{color:var(--text-dim)}
+  .nav-links a.ext{color:#2a3d52}.nav-links a.ext:hover{color:var(--text-dim)}
   .nav-links span.coming{color:#243140;cursor:not-allowed}
-  .wrap{max-width:760px;margin:0 auto;padding:0 1.5rem}
-  .masthead{padding:4rem 0 2rem;border-bottom:1px solid var(--border)}
-  .kicker{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.6rem;margin-bottom:1.4rem}
+  .wrap{max-width:780px;margin:0 auto;padding:0 1.5rem}
+  .masthead{padding:3.5rem 0 1.6rem}
+  .hero-art{width:100%;height:150px;border-radius:12px;overflow:hidden;border:1px solid var(--border-hi);margin-bottom:1.7rem;box-shadow:0 0 36px rgba(57,255,154,0.08)}
+  .kicker{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 2s infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  h1.title{font-family:'Playfair Display',serif;font-weight:900;font-size:3rem;line-height:1.05;color:var(--text-hi);letter-spacing:-.01em}
+  h1.title{font-family:'Playfair Display',serif;font-weight:900;font-size:2.8rem;line-height:1.05;color:var(--text-hi);letter-spacing:-.01em}
   h1.title .cursor{color:var(--accent);animation:blink 1.1s step-end infinite}
   @keyframes blink{50%{opacity:0}}
-  .standfirst{font-size:1.25rem;font-style:italic;color:var(--text);margin-top:1.2rem;font-weight:300}
-  .meta-row{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:1.6rem;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)}
+  .standfirst{font-size:1.22rem;font-style:italic;color:var(--text);margin-top:1.1rem;font-weight:300}
+  .meta-row{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:1.5rem;font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)}
   .meta-row .day{color:var(--accent)}
-  .segment{padding:3rem 0;border-bottom:1px solid var(--border)}
-  .seg-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.4rem}
+  /* TL;DR */
+  .tldr{border:1px solid var(--border-hi);border-radius:10px;padding:1.2rem 1.4rem;margin:.5rem 0 1rem;background:linear-gradient(180deg,rgba(57,255,154,0.05),transparent)}
+  .tldr h3{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+  .tldr ul{list-style:none}
+  .tldr li{font-family:'DM Mono',monospace;font-size:.84rem;color:var(--text);padding:.32rem 0 .32rem 1.4rem;position:relative;line-height:1.5}
+  .tldr li::before{content:'>';position:absolute;left:0;color:var(--accent)}
+  .tldr li b{color:var(--text-hi);font-weight:500}
+  .segment{padding:2.8rem 0;border-top:1px solid var(--border)}
+  .seg-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.3rem}
   .seg-num{font-family:'DM Mono',monospace;font-size:.85rem;color:var(--accent);opacity:.7}
   .seg-label{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--text-dim)}
   .tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--border-hi);padding:.2rem .55rem;border-radius:3px;margin-bottom:1rem}
-  h2.head{font-family:'Playfair Display',serif;font-weight:700;font-size:1.85rem;line-height:1.15;color:var(--text-hi);margin-bottom:1rem}
-  .segment p{margin-bottom:1.1rem}
-  .segment p strong{color:var(--text-hi);font-weight:600}
+  h2.head{font-family:'Playfair Display',serif;font-weight:700;font-size:1.82rem;line-height:1.15;color:var(--text-hi);margin-bottom:1rem}
+  .segment p{margin-bottom:1.1rem}.segment p strong{color:var(--text-hi);font-weight:600}
   .pulled{font-family:'Playfair Display',serif;font-style:italic;font-size:1.4rem;color:var(--accent);border-left:2px solid var(--accent);padding:.4rem 0 .4rem 1.4rem;margin:1.6rem 0;line-height:1.4}
-  .patchtable{width:100%;border-collapse:collapse;margin:1.4rem 0;font-family:'DM Mono',monospace;font-size:.8rem}
-  .patchtable th{text-align:left;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;font-size:.62rem;font-weight:500;padding:.6rem .7rem;border-bottom:1px solid var(--border-hi)}
+  /* THREAT ACTOR SPOTLIGHT */
+  .spotlight{border:1px solid var(--red);border-radius:10px;padding:1.2rem 1.4rem;margin:1.5rem 0;background:linear-gradient(180deg,rgba(255,68,68,0.06),transparent)}
+  .spotlight .sl-top{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem}
+  .spotlight .sl-badge{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:.2rem .5rem;border-radius:3px}
+  .spotlight .sl-name{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--text-hi)}
+  .spotlight dl{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;font-size:.92rem}
+  .spotlight dt{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);padding-top:.25rem}
+  .spotlight dd{color:var(--text)}
+  .spotlight dd strong{color:var(--text-hi)}
+  /* VULN TABLE */
+  .patchtable{width:100%;border-collapse:collapse;margin:1.3rem 0;font-family:'DM Mono',monospace;font-size:.78rem}
+  .patchtable th{text-align:left;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;font-size:.58rem;font-weight:500;padding:.6rem .7rem;border-bottom:1px solid var(--border-hi)}
   .patchtable td{padding:.7rem .7rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
-  .sev{font-weight:500}
-  .sev.crit{color:var(--red)} .sev.high{color:var(--amber)} .sev.med{color:var(--cyan)}
   .cve{color:var(--accent)}
-  .sources{margin-top:1.4rem;font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.06em}
+  .badge{display:inline-block;font-size:.62rem;font-weight:500;padding:.15rem .5rem;border-radius:20px;white-space:nowrap}
+  .badge.crit{color:#ff6b6b;background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.4)}
+  .badge.high{color:var(--amber);background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.4)}
+  .badge.med{color:var(--cyan);background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4)}
+  .flag{color:var(--red);font-size:.62rem}
+  /* RECOMMENDATIONS */
+  .recs{border:1px solid var(--green-dim);border-radius:10px;padding:1.2rem 1.4rem;margin:1.5rem 0;background:linear-gradient(180deg,rgba(57,255,154,0.05),transparent)}
+  .recs h3{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+  .recs ol{list-style:none;counter-reset:r}
+  .recs li{counter-increment:r;font-size:.95rem;color:var(--text);padding:.4rem 0 .4rem 2rem;position:relative;line-height:1.55;border-bottom:1px solid var(--border)}
+  .recs li:last-child{border-bottom:none}
+  .recs li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent)}
+  .recs li b{color:var(--text-hi)}
+  .sources{margin-top:1.3rem;font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.06em}
   .sources .lab{color:var(--text-dim);text-transform:uppercase;letter-spacing:.16em;margin-right:.6rem}
   .sources a{color:var(--green-dim);text-decoration:none;margin-right:1rem;border-bottom:1px dotted var(--green-dim)}
   .sources a:hover{color:var(--accent);border-bottom-color:var(--accent)}
-  .yt-cta{margin:3rem 0;padding:1.6rem;border:1px dashed var(--border-hi);border-radius:6px;display:flex;align-items:center;gap:1.2rem;background:var(--bg-raise)}
-  .yt-icon{font-size:1.6rem;color:var(--red)}
-  .yt-cta .txt{flex:1}
+  .yt-cta{margin:2.8rem 0;padding:1.5rem;border:1px dashed var(--border-hi);border-radius:6px;display:flex;align-items:center;gap:1.2rem;background:var(--bg-raise)}
+  .yt-icon{font-size:1.6rem;color:var(--red)}.yt-cta .txt{flex:1}
   .yt-cta .txt b{color:var(--text-hi);font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.1em}
   .yt-cta .txt span{display:block;font-size:.95rem;color:var(--text-dim)}
   .yt-badge{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber);padding:.25rem .55rem;border-radius:3px}
-  .prevnext{display:flex;justify-content:space-between;padding:2.5rem 0;gap:1rem}
-  .prevnext a,.prevnext span{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-decoration:none;color:var(--text-dim);transition:color .2s}
-  .prevnext a:hover{color:var(--accent)}
-  .prevnext span.off{color:#243140;cursor:not-allowed}
+  .prevnext{display:flex;justify-content:space-between;padding:2.2rem 0;gap:1rem;border-top:1px solid var(--border)}
+  .prevnext a,.prevnext span{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-decoration:none;color:var(--text-dim)}
+  .prevnext a:hover{color:var(--accent)}.prevnext span.off{color:#243140;cursor:not-allowed}
   .prevnext .lab{display:block;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#2a3d52;margin-bottom:.25rem}
-  footer{border-top:1px solid var(--border);padding:3rem 1.5rem;text-align:center}
-  .threadnote{max-width:760px;margin:0 auto 1.8rem;font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.06em;color:var(--text-dim);line-height:1.7;border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;text-align:left}
+  footer{border-top:1px solid var(--border);padding:2.8rem 1.5rem;text-align:center}
+  .threadnote{max-width:780px;margin:0 auto 1.6rem;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.06em;color:var(--text-dim);line-height:1.7;border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;text-align:left}
   .threadnote b{color:var(--accent)}
-  .footer-copy{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase}
-  @media(max-width:600px){h1.title{font-size:2.1rem}h2.head{font-size:1.45rem}.nav-links{gap:.9rem}.standfirst{font-size:1.1rem}}
+  .footer-copy{font-family:'DM Mono',monospace;font-size:.64rem;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase}
+  @media(max-width:600px){h1.title{font-size:2rem}h2.head{font-size:1.42rem}.nav-links{gap:.9rem}.standfirst{font-size:1.08rem}.spotlight dl{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -97,22 +121,58 @@
 
 <div class="wrap">
   <header class="masthead">
-    <div class="kicker"><span class="dot"></span> Daily Cybersecurity Intelligence</div>
-    <h1 class="title">ShinyHunters claims the house that Brunson won<span class="cursor">_</span></h1>
-    <p class="standfirst">On the night the Knicks ended a 53-year wait, the crew that's been everywhere in 2026 says it has the keys to their landlord's data. Elsewhere, a record patch haul — and two of the week's loudest breaches turned out never to have happened.</p>
-    <div class="meta-row">
-      <span class="day">Day 008</span>
-      <span>Sunday · 14 June 2026</span>
-      <span>cyber.nodeshield.net</span>
+    <div class="hero-art">
+      <svg viewBox="0 0 780 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs><filter id="bgl"><feGaussianBlur stdDeviation="2.5"/></filter></defs>
+        <rect width="780" height="150" fill="#080c12"/>
+        <g opacity=".5" stroke="#39ff9a" stroke-width="1">
+          <line x1="0" y1="38" x2="780" y2="38"/><line x1="0" y1="112" x2="780" y2="112"/>
+        </g>
+        <g font-family="DM Mono,monospace" font-size="11" fill="#1a7a4a" opacity=".8">
+          <text x="20" y="22">$ scan --network nodeshield --severity high</text>
+          <text x="20" y="60">[!] CVE-2026-35273  9.8  oracle/peoplesoft   EXPLOITED</text>
+          <text x="20" y="78">[!] CVE-2026-11645  0day chrome/v8           EXPLOITED</text>
+          <text x="20" y="96">[*] patch-tuesday   208 CVEs                 REVIEW</text>
+        </g>
+        <g transform="translate(660 75)" filter="url(#bgl)">
+          <path d="M0 -42 L36 -26 L36 14 Q36 40 0 52 Q-36 40 -36 14 L-36 -26 Z" fill="none" stroke="#39ff9a" stroke-width="2.5" opacity=".9"/>
+          <path d="M-14 2 l9 11 l20 -24" fill="none" stroke="#39ff9a" stroke-width="3"/>
+        </g>
+        <text x="20" y="134" font-family="DM Mono,monospace" font-size="11" fill="#39ff9a">cyber.nodeshield.net &#9608;</text>
+      </svg>
     </div>
+    <div class="kicker"><span class="dot"></span> Daily Cybersecurity Intelligence</div>
+    <h1 class="title">ShinyHunters claims another household name<span class="cursor">_</span></h1>
+    <p class="standfirst">The extortion crew behind a string of 2026's biggest breaches says it has a new victim. Plus a record-breaking patch haul, a quiet SaaS disclosure, and two of the week's loudest breaches that turned out never to have happened.</p>
+    <div class="meta-row"><span class="day">Day 008</span><span>Sunday · 14 June 2026</span><span>cyber.nodeshield.net</span></div>
   </header>
+
+  <div class="tldr">
+    <h3>// Today in 60 seconds</h3>
+    <ul>
+      <li><b>ShinyHunters</b> claims it breached Madison Square Garden Sports &mdash; unconfirmed, but the crew is everywhere this year.</li>
+      <li><b>ServiceNow</b> discloses a customer-data incident; the human, again, is the zero-day.</li>
+      <li><b>Patch Tuesday</b> sets a record at 208 CVEs; a Chrome V8 zero-day is under active attack.</li>
+      <li><b>VRChat &amp; Discord</b> "breaches" were fabricated filings on Maine's official portal &mdash; verification is the scarce resource.</li>
+    </ul>
+  </div>
 
   <section class="segment">
     <div class="seg-head"><span class="seg-num">01</span><span class="seg-label">Lead Story</span></div>
     <span class="tag">Extortion</span>
-    <h2 class="head">The crew that's everywhere claims the Knicks' owner</h2>
-    <p>Hours after New York lifted the trophy, the extortion collective <strong>ShinyHunters</strong> claimed it had breached <strong>Madison Square Garden Sports</strong> — the company behind the NBA's Knicks and the NHL's Rangers. MSGS has not confirmed anything, and a claim is not a confirmed compromise. But with this crew, the claim has become a weapon in its own right: reputational pressure applied before a single record is verified.</p>
-    <p>What makes it land is the pattern around it. The same name is attached to this month's <strong>Oracle PeopleSoft</strong> zero-day campaign (tracked by Mandiant as UNC6240), to McGraw Hill, to the Canvas-maker Instructure — which reportedly paid and got a promise, not protection — and to a string of CRM raids at the likes of Charter and Carnival. One brand, a dozen victims, a single playbook.</p>
+    <h2 class="head">The crew that's everywhere claims another scalp</h2>
+    <p>The extortion collective <strong>ShinyHunters</strong> claims it has breached <strong>Madison Square Garden Sports</strong>, the parent company of the NBA's Knicks and the NHL's Rangers. MSGS has not confirmed anything, and a claim is not a confirmed compromise &mdash; but with this crew, the claim is itself a weapon: reputational pressure applied before a single record is verified, and timed for maximum attention.</p>
+    <p>What makes it land is the pattern around it. The same name is attached to this month's <strong>Oracle PeopleSoft</strong> zero-day campaign (tracked by Mandiant as UNC6240), to McGraw Hill, to the Canvas-maker Instructure &mdash; which reportedly paid and got a promise, not protection &mdash; and to a string of CRM raids at the likes of Charter and Carnival.</p>
+    <div class="spotlight">
+      <div class="sl-top"><span class="sl-badge">Threat Actor Spotlight</span><span class="sl-name">ShinyHunters</span></div>
+      <dl>
+        <dt>Aliases</dt><dd>Tracked by Mandiant as <strong>UNC6240</strong></dd>
+        <dt>Model</dt><dd>Data theft &rarr; extortion. The public <strong>claim</strong> is part of the leverage.</dd>
+        <dt>2026 hits</dt><dd>Oracle PeopleSoft (0-day), McGraw Hill, Instructure/Canvas, Charter, Carnival, Match Group &mdash; and now, allegedly, MSGS.</dd>
+        <dt>Entry point</dt><dd>Mostly SaaS &amp; CRM via social engineering and unpatched edge software.</dd>
+        <dt>Status</dt><dd><span class="flag">MSGS claim unverified &mdash; treat as alleged.</span></dd>
+      </dl>
+    </div>
     <p class="pulled">When one name attaches to a dozen unrelated victims, you're not tracking a hacker anymore. You're tracking a business model.</p>
     <div class="sources"><span class="lab">Sources</span>
       <a href="https://cybernews.com/security/" target="_blank" rel="noopener">Cybernews</a>
@@ -123,9 +183,9 @@
   <section class="segment">
     <div class="seg-head"><span class="seg-num">02</span><span class="seg-label">Field Report</span></div>
     <span class="tag">SaaS</span>
-    <h2 class="head">ServiceNow admits an incident — and the human stays the zero-day</h2>
+    <h2 class="head">ServiceNow admits an incident &mdash; the human stays the zero-day</h2>
     <p><strong>ServiceNow</strong> has disclosed a security incident that gave attackers access to customer data, framed in the careful language of "researcher activity." Whatever the framing, it sits inside 2026's most reliable storyline: the breach that starts with one trusting person, not one clever exploit.</p>
-    <p>The receipts pile up. Carnival traced a roughly six-million-record exposure to a single social-engineered employee account; Charter's "only sales tools" reassurance dissolved into nearly five million records in the wild. CRMs concentrate precisely the data that should never sit in plaintext, and a phone call still opens more doors than any payload. Encrypt and tokenise the sensitive fields, watch for anomalous bulk exports, and stop treating "it was just one account" as comfort. One account is the whole game.</p>
+    <p>The receipts pile up. Carnival traced a roughly six-million-record exposure to a single social-engineered employee account; Charter's "only sales tools" reassurance dissolved into nearly five million records in the wild. CRMs concentrate precisely the data that should never sit in plaintext, and a phone call still opens more doors than any payload.</p>
     <div class="sources"><span class="lab">Sources</span>
       <a href="https://cybernews.com/security/" target="_blank" rel="noopener">Cybernews</a>
       <a href="https://www.pkware.com/blog/2026-data-breaches" target="_blank" rel="noopener">PKWARE</a>
@@ -134,17 +194,27 @@
 
   <section class="segment">
     <div class="seg-head"><span class="seg-num">03</span><span class="seg-label">Patch Desk</span></div>
-    <span class="tag">CVE / Patch</span>
+    <span class="tag">Vulnerability Watch</span>
     <h2 class="head">A record haul, and a researcher's grudge</h2>
     <table class="patchtable">
-      <thead><tr><th>CVE / Item</th><th>Severity</th><th>Product</th><th>Note</th></tr></thead>
+      <thead><tr><th>CVE / Item</th><th>Severity</th><th>Product</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>June Patch Tuesday</td><td class="sev crit">208 CVEs</td><td>Microsoft</td><td>A record monthly haul, including one actively exploited zero-day and multiple critical RCE flaws.</td></tr>
-        <tr><td class="cve">CVE-2026-11645</td><td class="sev crit">Critical · 0-day</td><td>Google Chrome (V8)</td><td>Exploited in the wild; Google shipped an emergency update for the JavaScript engine.</td></tr>
-        <tr><td>RoguePlanet PoC</td><td class="sev high">High</td><td>Windows</td><td>Researcher "Nightmare Eclipse" reposted a fresh zero-day on GitHub hours after Patch Tuesday, despite a prior ban.</td></tr>
+        <tr><td class="cve">CVE-2026-35273</td><td><span class="badge crit">CRITICAL 9.8</span></td><td>Oracle PeopleSoft PeopleTools</td><td><span class="flag">Exploited &middot; 0-day</span></td></tr>
+        <tr><td class="cve">CVE-2026-11645</td><td><span class="badge crit">CRITICAL</span></td><td>Google Chrome (V8)</td><td><span class="flag">Exploited in the wild</span></td></tr>
+        <tr><td>Patch Tuesday</td><td><span class="badge high">208 CVEs</span></td><td>Microsoft (record month)</td><td>Includes 1 exploited 0-day</td></tr>
+        <tr><td>RoguePlanet PoC</td><td><span class="badge high">HIGH</span></td><td>Windows</td><td>Public PoC on GitHub</td></tr>
       </tbody>
     </table>
-    <p>Two truths in one table. First, "record patch month" has quietly become a monthly headline — 208 is not a spike, it's the new baseline. Second, the RoguePlanet saga is a reminder that disclosure is a human drama as much as a technical one: a banned researcher dropping live exploits to embarrass a vendor is a governance problem no scanner will catch.</p>
+    <p>Two truths in one table. "Record patch month" has quietly become a <em>monthly</em> headline &mdash; 208 isn't a spike, it's the new baseline. And the RoguePlanet saga (a banned researcher, "Nightmare Eclipse," reposting a live zero-day hours after Patch Tuesday) is a reminder that disclosure is a human drama no scanner will catch.</p>
+    <div class="recs">
+      <h3>// Defender actions &mdash; do these first</h3>
+      <ol>
+        <li><b>Lock down PeopleSoft.</b> If the Environment Management Hub (PSEMHUB) is internet-reachable, restrict it now &mdash; CVE-2026-35273 needs no login.</li>
+        <li><b>Force-update Chrome.</b> The V8 zero-day is being exploited; push the emergency build and verify version compliance.</li>
+        <li><b>Triage Patch Tuesday by exploitation, not count.</b> 208 CVEs is noise; the one active zero-day is the signal.</li>
+        <li><b>Harden the human edge.</b> MFA + call-back verification on CRM/SaaS admin actions; alert on anomalous bulk exports.</li>
+      </ol>
+    </div>
     <div class="sources"><span class="lab">Sources</span>
       <a href="https://securityaffairs.com/" target="_blank" rel="noopener">Security Affairs</a>
       <a href="https://cybernews.com/" target="_blank" rel="noopener">Cybernews</a>
@@ -155,8 +225,8 @@
     <div class="seg-head"><span class="seg-num">04</span><span class="seg-label">Incident</span></div>
     <span class="tag">Disinformation</span>
     <h2 class="head">The breaches that never happened</h2>
-    <p>This week's most instructive incident is one that didn't occur. Fabricated breach notices naming <strong>VRChat</strong> (2.4 million users) and <strong>Discord</strong> (10 million) were filed on Maine's official Attorney General portal and published almost immediately — no verification required. VRChat says it never filed; the employee named on the notice does not exist. Maine pulled the VRChat filing on 12 June and posted a memo about fraudulent reporting.</p>
-    <p>Sit with the elegance of it. Security teams, journalists and class-action lawyers treat that portal as ground truth. An attacker who can plant a false entry there manufactures a "confirmed breach" out of nothing — instant phishing pretext, instant stock pressure, instant panic in a community built on pseudonymity. You no longer need to steal the data. You only need everyone to believe you did.</p>
+    <p>This week's most instructive incident is one that didn't occur. Fabricated breach notices naming <strong>VRChat</strong> (2.4 million users) and <strong>Discord</strong> (10 million) were filed on Maine's official Attorney General portal and published almost immediately &mdash; no verification required. VRChat says it never filed; the employee named on the notice does not exist. Maine pulled the VRChat filing on 12 June and posted a memo about fraudulent reporting.</p>
+    <p>Sit with the elegance of it. Security teams, journalists and class-action lawyers treat that portal as ground truth. An attacker who can plant a false entry there manufactures a "confirmed breach" out of nothing &mdash; instant phishing pretext, instant stock pressure, instant panic. You no longer need to steal the data. You only need everyone to believe you did.</p>
     <div class="sources"><span class="lab">Sources</span>
       <a href="https://cybernews.com/security/vrchat-data-breach-fake/" target="_blank" rel="noopener">Cybernews</a>
       <a href="https://www.gblock.app/articles/maine-breach-portal-fake-disclosures-june-2026" target="_blank" rel="noopener">gblock</a>
@@ -167,8 +237,8 @@
     <div class="seg-head"><span class="seg-num">05</span><span class="seg-label">Signal</span></div>
     <span class="tag">Signal</span>
     <h2 class="head">Trust is the soft target now</h2>
-    <p>Read today's edition end to end and the pattern isn't malware — it's belief. A real crew claiming a real target it may not hold. A real vendor admitting a real incident in soft language. A fake breach that fooled the people whose job is not to be fooled. The scarce resource in 2026 isn't a patch; it's verification.</p>
-    <p>That's the uncomfortable convergence with the rest of the network today: over on Sport, New York's data is allegedly walking out the door on the very night the city celebrates; over on Play, a community spent a weekend braced for a leak that didn't exist. Defence used to mean keeping attackers out. Increasingly it means proving what's actually true, fast enough to matter.</p>
+    <p>Read today's edition end to end and the pattern isn't malware &mdash; it's belief. A real crew claiming a real target it may not hold. A real vendor admitting a real incident in soft language. A fake breach that fooled the people whose job is not to be fooled. The scarce resource in 2026 isn't a patch; it's verification.</p>
+    <p>The same convergence runs across the network today: a sports franchise's data allegedly walking out the door, and a gaming community braced all weekend for a leak that never existed. Defence used to mean keeping attackers out. Increasingly it means proving what's actually true, fast enough to matter.</p>
     <div class="sources"><span class="lab">Sources</span>
       <a href="https://cybernews.com/security/" target="_blank" rel="noopener">Cybernews</a>
     </div>
@@ -176,7 +246,7 @@
 
   <div class="yt-cta">
     <span class="yt-icon">&#9654;</span>
-    <div class="txt"><b>NODESHIELD BRIEF — THE VIDEO EDITION</b><span>Today's five segments, narrated. Coming to the channel soon.</span></div>
+    <div class="txt"><b>NODESHIELD BRIEF &mdash; THE VIDEO EDITION</b><span>Today's five segments, narrated. Coming to the channel soon.</span></div>
     <span class="yt-badge">Coming Soon</span>
   </div>
 
@@ -188,7 +258,7 @@
 
 <footer>
   <div class="threadnote">
-    <b>// NETWORK THREAD —</b> Today's story runs across all three NodeShield channels: trust is the soft target. The Knicks' alleged breach here on the Brief, the title it celebrates over on <a href="https://sports.nodeshield.net" style="color:var(--amber);text-decoration:none">Sport</a>, and a weekend of panic over breaches that never happened on <a href="https://play.nodeshield.net" style="color:var(--cyan);text-decoration:none">Play</a>. Read across.
+    <b>// NETWORK THREAD &mdash;</b> Today's story runs across all three NodeShield channels: trust is the soft target. The alleged breach here on the Brief, the title it shadows over on <a href="https://sports.nodeshield.net" style="color:var(--amber);text-decoration:none">Sport</a>, and a weekend of panic over breaches that never happened on <a href="https://play.nodeshield.net" style="color:var(--cyan);text-decoration:none">Play</a>. Read across.
   </div>
   <span class="footer-copy">&copy; 2026 NodeShield Brief &nbsp;·&nbsp; Day 008 &nbsp;·&nbsp; cyber.nodeshield.net</span>
 </footer>
